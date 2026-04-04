@@ -117,9 +117,7 @@
           <xsl:if test="$top-images">
             <fo:table-row line-height="0">
               <fo:table-cell padding="4pt 0 0 0">
-                 <xsl:call-template name="processBootstrapDirection"/>
                  <fo:block>
-                    <xsl:call-template name="processBootstrapDirection"/>
                     <xsl:apply-templates select="$top-images"/>
                  </fo:block>
               </fo:table-cell>
@@ -138,7 +136,7 @@
                  </xsl:if>
                  <fo:block>
                     <xsl:call-template name="processBootstrapDirection"/>
-                    <xsl:apply-templates select="$title"/>
+                        <xsl:apply-templates select="$title"/>
                  </fo:block>
               </fo:table-cell>
             </fo:table-row>
@@ -186,8 +184,8 @@
   <xsl:template match="*[contains(@class, ' bootstrap-d/card ') or (tokenize(@outputclass, ' ') = 'card' and (contains(@class, ' topic/section ') or contains(@class, ' topic/div ') or contains(@class, ' topic/bodydiv ')))]/*[contains(@class, ' topic/title ')]" priority="10">
     <fo:block font-size="14pt" font-weight="bold" margin-bottom="8pt">
        <xsl:call-template name="processBootstrapDirection"/>
-       <xsl:apply-templates/>
-    </fo:block>
+                <xsl:apply-templates/>
+             </fo:block>
   </xsl:template>
 
   <!-- Card Images (Ensure 100% width scaling within the row) -->

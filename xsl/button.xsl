@@ -1,9 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
+                xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
                 xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
-                exclude-result-prefixes="opentopic-func"
+                exclude-result-prefixes="opentopic-func fox"
                 version="2.0">
+
+  <!-- Button Toolbar Support (Single Row Block) -->
+  <xsl:template match="*[contains(@class, ' bootstrap-d/button-toolbar ')]" priority="10">
+    <fo:block margin-top="6pt" margin-bottom="6pt" wrap-option="no-wrap" keep-together.within-line="always">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates mode="toolbar-child"/>
+    </fo:block>
+  </xsl:template>
+
+  <!-- Skip group containers in toolbars, just process buttons -->
+  <xsl:template match="*[contains(@class, ' bootstrap-d/button-group ')]" mode="toolbar-child">
+    <xsl:apply-templates mode="toolbar-child"/>
+  </xsl:template>
+
+  <!-- Process buttons directly in toolbar -->
+  <xsl:template match="*[contains(@class, ' bootstrap-d/button ')]" mode="toolbar-child">
+    <xsl:apply-templates select="."/>
+  </xsl:template>
+
+  <xsl:template match="text()" mode="toolbar-child"/>
+
+  <!-- Button Group Support (Standard) -->
+  <xsl:template match="*[contains(@class, ' bootstrap-d/button-group ')]" priority="10">
+    <fo:inline>
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates/>
+    </fo:inline>
+  </xsl:template>
 
   <!-- Button Support -->
   <xsl:template match="*[contains(@class, ' bootstrap-d/button ')]" priority="10">
@@ -27,12 +56,21 @@
       <xsl:variable name="size" select="(@size, 'default')[1]"/>
       
       <!-- 1. Background & Text Colors -->
-      <xsl:call-template name="processBootstrapAttrSetReflection">
-        <xsl:with-param name="attrSet" select="concat('__bg__', $theme)"/>
-      </xsl:call-template>
-      <xsl:call-template name="processBootstrapAttrSetReflection">
-        <xsl:with-param name="attrSet" select="concat('__color__', if ($theme = 'warning' or $theme = 'light') then 'black' else 'white')"/>
-      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="@outline = 'yes'">
+          <xsl:call-template name="processBootstrapAttrSetReflection">
+            <xsl:with-param name="attrSet" select="concat('__color__', $theme)"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="processBootstrapAttrSetReflection">
+            <xsl:with-param name="attrSet" select="concat('__bg__', $theme)"/>
+          </xsl:call-template>
+          <xsl:call-template name="processBootstrapAttrSetReflection">
+            <xsl:with-param name="attrSet" select="concat('__color__', if ($theme = 'warning' or $theme = 'light') then 'black' else 'white')"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
       
       <!-- 2. Borders -->
       <xsl:attribute name="border-style">solid</xsl:attribute>
@@ -80,6 +118,37 @@
         <xsl:with-param name="attrValue" select="@margin"/>
         <xsl:with-param name="prefix" select="'m'"/>
       </xsl:call-template>
+      <!-- 6. Button Group Position Awareness -->
+      <xsl:if test="parent::*[contains(@class, ' bootstrap-d/button-group ')]">
+        <xsl:variable name="is-first" select="not(preceding-sibling::*[contains(@class, ' bootstrap-d/button ')])"/>
+        <xsl:variable name="is-last" select="not(following-sibling::*[contains(@class, ' bootstrap-d/button ')])"/>
+        <xsl:choose>
+          <!-- Single item: Keep all rounding, zero margins -->
+          <xsl:when test="$is-first and $is-last">
+            <xsl:attribute name="margin-left">0pt</xsl:attribute>
+            <xsl:attribute name="margin-right">0pt</xsl:attribute>
+          </xsl:when>
+          <!-- Middle item: No rounded corners, overlapping margins -->
+          <xsl:when test="not($is-first) and not($is-last)">
+            <xsl:attribute name="fox:border-radius">0</xsl:attribute>
+            <xsl:attribute name="margin-left">-1pt</xsl:attribute>
+            <xsl:attribute name="margin-right">-1pt</xsl:attribute>
+          </xsl:when>
+          <xsl:when test="$is-first">
+            <xsl:attribute name="fox:border-before-end-radius">0</xsl:attribute>
+            <xsl:attribute name="fox:border-after-end-radius">0</xsl:attribute>
+            <xsl:attribute name="margin-left">0pt</xsl:attribute>
+            <xsl:attribute name="margin-right">-1pt</xsl:attribute>
+          </xsl:when>
+          <xsl:when test="$is-last">
+            <xsl:attribute name="fox:border-before-start-radius">0</xsl:attribute>
+            <xsl:attribute name="fox:border-after-start-radius">0</xsl:attribute>
+            <xsl:attribute name="margin-left">-1pt</xsl:attribute>
+            <xsl:attribute name="margin-right">0pt</xsl:attribute>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:if>
+
       <xsl:call-template name="processBootstrapOutputClass">
         <xsl:with-param name="attrValue" select="@outputclass"/>
       </xsl:call-template>
