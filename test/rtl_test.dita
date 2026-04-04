@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  RTL Layout Test Case
+  Expected: 
+  1. The grid-row should be flipped.
+  2. The paragraph in the first col should be on the RIGHT.
+  3. The card in the second col should be on the LEFT of the paragraph (Right of the gap if sub-100%).
+-->
+<!DOCTYPE topic PUBLIC "-//Infotexture//DTD DITA Bootstrap Topic//EN" "bootstrap-topic.dtd">
+<topic id="rtl_test">
+  <title>RTL Grid and Card Test</title>
+  <body>
+    <p dir="rtl">Standard LTR text inside a grid column. This should be aligned to the right.</p>
+    <bodydiv>
+      <grid-row dir="rtl">
+        <grid-col colspan="3">
+          <p>Standard LTR text inside a grid column. This should be aligned to the right.</p>
+        </grid-col>
+        <grid-col colspan="3">
+          <p>هذا نص باللغة العربية داخل عمود شبكة. يجب أن يكون محاذياً لليمين.</p>
+        </grid-col>
+      </grid-row>
+    </bodydiv>
+
+    <bodydiv>
+    <grid-row dir="rtl">
+        <grid-col>
+          <p>Standard LTR text inside a grid column. This should be aligned to the right.</p>
+        </grid-col>
+        <grid-col>
+          <p>هذا نص باللغة العربية داخل عمود شبكة. يجب أن يكون محاذياً لليمين.</p>
+        </grid-col>
+      </grid-row>
+    </bodydiv>
+
+    <bodydiv>
+      <grid-row dir="rtl">
+        <grid-col>
+          <card>
+            <title>بطاقة RTL</title>
+            <p>محتوى البطاقة يجب أن يكون محاذياً لليمين والبطاقة نفسها يجب أن تظهر على الجانب الأيمن من الشبكة.</p>
+          </card>
+        </grid-col>
+      </grid-row>
+    </bodydiv>
+
+
+    <card dir="rtl">
+      <title>بطاقة RTL</title>
+      <p>محتوى البطاقة يجب أن يكون محاذياً لليمين والبطاقة نفسها يجب أن تظهر على الجانب الأيمن من الشبكة.</p>
+    </card>
+  </body>
+</topic>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="dita-ot/plugin.rnc" type="application/relax-ng-compact-syntax"?>
+<plugin id="dita-bootstrap.print" version="1.0.0">
+  <require plugin="net.infotexture.dita-bootstrap"/>
+  <feature extension="dita.xsl.xslfo" value="xsl/xslfo.xsl" type="file"/>
+</plugin>

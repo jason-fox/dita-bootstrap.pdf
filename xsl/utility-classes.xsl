@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:fo="http://www.w3.org/1999/XSL/Format"
+                xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
+                version="2.0">
+
+  <!-- Reflection Template for Bootstrap Attribute Sets -->
+  <xsl:template name="processBootstrapAttrSetReflection">
+    <xsl:param name="attrSet"/>
+    <xsl:param name="path" select="'../cfg/fo/attrs/bootstrap-attr.xsl'"/>
+
+    <xsl:for-each select="document($path)//xsl:attribute-set[@name = $attrSet]/xsl:attribute">
+      <xsl:attribute name="{@name}">
+        <xsl:value-of select="."/>
+      </xsl:attribute>
+    </xsl:for-each>
+  </xsl:template>
+
+  <!-- Process @width attribute -->
+  <xsl:template name="processBootstrapWidth">
+    <xsl:param name="attrValue"/>
+    <xsl:if test="$attrValue">
+      <xsl:call-template name="processBootstrapAttrSetReflection">
+        <xsl:with-param name="attrSet" select="concat('w-', $attrValue)"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+
+  <!-- Process @border attribute -->
+  <xsl:template name="processBootstrapBorder">
+    <xsl:param name="attrValue"/>
+    <xsl:if test="$attrValue">
+      <xsl:for-each select="tokenize(normalize-space($attrValue), ' ')">
+        <xsl:variable name="token" select="."/>
+        <xsl:variable name="attrSetName">
+          <xsl:choose>
+            <xsl:when test="$token = 'yes' or $token = 'true' or $token = 'border'">border</xsl:when>
+            <xsl:when test="starts-with($token, 'border-')">
+              <xsl:value-of select="$token"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="concat('border-', $token)"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:call-template name="processBootstrapAttrSetReflection">
+          <xsl:with-param name="attrSet" select="$attrSetName"/>
+        </xsl:call-template>
+      </xsl:for-each>
+    </xsl:if>
+  </xsl:template>
+
+  <!-- Process @frame attribute for Figures -->
+  <xsl:template name="processBootstrapFrame">
+    <xsl:param name="attrValue"/>
+    <xsl:if test="$attrValue">
+      <xsl:variable name="processedValue">
+        <xsl:choose>
+          <xsl:when test="$attrValue = 'all'">border</xsl:when>
+          <xsl:when test="$attrValue = 'sides'">start end</xsl:when>
+          <xsl:when test="$attrValue = 'top'">top</xsl:when>
+          <xsl:when test="$attrValue = 'bottom'">bottom</xsl:when>
+          <xsl:when test="$attrValue = 'topbot'">top bottom</xsl:when>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:if test="normalize-space($processedValue) != ''">
+        <xsl:call-template name="processBootstrapBorder">
+          <xsl:with-param name="attrValue" select="$processedValue"/>
+        </xsl:call-template>
+        <!-- Effectively an additional padded border - using p-3 / 12pt -->
+        <xsl:attribute name="padding">12pt</xsl:attribute>
+      </xsl:if>
+    </xsl:if>
+  </xsl:template>
+
+  <!-- Process @bordercolor attribute -->
+  <xsl:template name="processBootstrapBorderColor">
+    <xsl:param name="attrValue"/>
+    <xsl:if test="$attrValue">
+      <xsl:attribute name="border-style">solid</xsl:attribute>
+      <xsl:attribute name="border-width">1pt</xsl:attribute>
+      <xsl:call-template name="processBootstrapAttrSetReflection">
+        <xsl:with-param name="attrSet" select="concat('border-', $attrValue)"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+
+  <!-- Process @dir attribute for RTL/LTR direction -->
+  <xsl:template name="processBootstrapDirection">
+    <xsl:variable name="direction">
+        <xsl:choose>
+            <xsl:when test="@dir"><xsl:value-of select="@dir"/></xsl:when>
+            <xsl:when test="ancestor::*[@dir]"><xsl:value-of select="ancestor::*[@dir][1]/@dir"/></xsl:when>
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+
+    <xsl:choose>
+      <xsl:when test="$direction = 'rtl'">
+        <xsl:attribute name="writing-mode">rl-tb</xsl:attribute>
+        <xsl:attribute name="direction">rtl</xsl:attribute>
+        <xsl:attribute name="text-align">right</xsl:attribute>
+        <xsl:attribute name="text-align-last">right</xsl:attribute>
+      </xsl:when>
+      <xsl:when test="$direction = 'ltr'">
+        <xsl:attribute name="writing-mode">lr-tb</xsl:attribute>
+        <xsl:attribute name="direction">ltr</xsl:attribute>
+        <xsl:attribute name="text-align">left</xsl:attribute>
+        <xsl:attribute name="text-align-last">left</xsl:attribute>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- Process @rounded attribute -->
+  <xsl:template name="processBootstrapRounded">
+    <xsl:param name="attrValue"/>
+    <xsl:if test="$attrValue">
+      <xsl:variable name="attrSetName">
+        <xsl:choose>
+          <xsl:when test="$attrValue = 'yes' or $attrValue = 'true'">rounded</xsl:when>
+          <xsl:otherwise><xsl:value-of select="concat('rounded-', $attrValue)"/></xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:call-template name="processBootstrapAttrSetReflection">
+        <xsl:with-param name="attrSet" select="$attrSetName"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+
+  <!-- Process @margin and @padding attributes -->
+  <xsl:template name="processBootstrapSpacing">
+    <xsl:param name="attrValue"/>
+    <xsl:param name="prefix"/> <!-- 'p' or 'm' -->
+    <xsl:if test="$attrValue">
+      <xsl:for-each select="tokenize(normalize-space($attrValue), ' ')">
+        <xsl:variable name="token" select="."/>
+        <xsl:variable name="attrSetName">
+          <xsl:choose>
+            <xsl:when test="$token = 'auto'">
+              <xsl:value-of select="concat($prefix, '-auto')"/>
+            </xsl:when>
+            <xsl:when test="string-length($token) = 1">
+              <xsl:value-of select="concat($prefix, '-', $token)"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="concat($prefix, substring($token, 1, 1), '-', substring($token, 2))"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:call-template name="processBootstrapAttrSetReflection">
+          <xsl:with-param name="attrSet" select="$attrSetName"/>
+        </xsl:call-template>
+      </xsl:for-each>
+    </xsl:if>
+  </xsl:template>
+
+  <!-- Process @outputclass attribute for Bootstrap classes -->
+  <xsl:template name="processBootstrapOutputClass">
+    <xsl:param name="attrValue"/>
+    <xsl:if test="$attrValue">
+      <xsl:variable name="tokens" select="tokenize(normalize-space($attrValue), ' ')"/>
+      
+      <!-- Pass 1: Background and other utilities -->
+      <xsl:for-each select="$tokens">
+        <xsl:variable name="token" select="."/>
+        <xsl:choose>
+          <xsl:when test="starts-with($token, 'bg-')">
+            <xsl:call-template name="processBootstrapAttrSetReflection">
+              <xsl:with-param name="attrSet" select="concat('__bg__', substring-after($token, 'bg-'))"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:when test="$token = 'border' or $token = 'border-top' or $token = 'border-bottom' or $token = 'border-start' or $token = 'border-end' or 
+                        starts-with($token, 'border-') or starts-with($token, 'rounded-') or $token = 'rounded' or
+                        starts-with($token, 'w-') or starts-with($token, 'p-') or starts-with($token, 'm-') or
+                        starts-with($token, 'px-') or starts-with($token, 'py-') or starts-with($token, 'pt-') or starts-with($token, 'pb-') or starts-with($token, 'ps-') or starts-with($token, 'pe-') or
+                        starts-with($token, 'mx-') or starts-with($token, 'my-') or starts-with($token, 'mt-') or starts-with($token, 'mb-') or starts-with($token, 'ms-') or starts-with($token, 'me-') or
+                        $token = 'h1' or $token = 'h2' or $token = 'h3' or $token = 'h4' or $token = 'h5' or $token = 'h6' or
+                        starts-with($token, 'display-')">
+            <xsl:call-template name="processBootstrapAttrSetReflection">
+              <xsl:with-param name="attrSet" select="$token"/>
+            </xsl:call-template>
+          </xsl:when>
+          <!-- Text Align utilities (New) -->
+          <xsl:when test="$token = 'text-start'"><xsl:attribute name="text-align">left</xsl:attribute></xsl:when>
+          <xsl:when test="$token = 'text-center'"><xsl:attribute name="text-align">center</xsl:attribute></xsl:when>
+          <xsl:when test="$token = 'text-end'"><xsl:attribute name="text-align">right</xsl:attribute></xsl:when>
+        </xsl:choose>
+      </xsl:for-each>
+
+      <!-- Pass 2: Text color -->
+      <xsl:for-each select="$tokens">
+        <xsl:variable name="token" select="."/>
+        <xsl:if test="starts-with($token, 'text-') and not($token = 'text-start' or $token = 'text-center' or $token = 'text-end')">
+          <xsl:call-template name="processBootstrapAttrSetReflection">
+            <xsl:with-param name="attrSet" select="concat('__color__', substring-after($token, 'text-'))"/>
+          </xsl:call-template>
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:if>
+  </xsl:template>
+
+  <!-- Baseline Section and Div Support -->
+  <xsl:template match="*[contains(@class, ' topic/section ') or 
+                         contains(@class, ' topic/div ') or 
+                         contains(@class, ' topic/bodydiv ')]" priority="5">
+    <fo:block>
+      <xsl:call-template name="commonattributes"/>
+      <xsl:if test="@color">
+        <xsl:call-template name="processBootstrapAttrSetReflection">
+          <xsl:with-param name="attrSet" select="concat('__bg__', @color)"/>
+        </xsl:call-template>
+        <xsl:if test="not(@padding)">
+          <xsl:attribute name="padding">5pt</xsl:attribute>
+        </xsl:if>
+      </xsl:if>
+      <xsl:call-template name="processBootstrapSpacing">
+        <xsl:with-param name="attrValue" select="@padding"/>
+        <xsl:with-param name="prefix" select="'p'"/>
+      </xsl:call-template>
+      <xsl:call-template name="processBootstrapSpacing">
+        <xsl:with-param name="attrValue" select="@margin"/>
+        <xsl:with-param name="prefix" select="'m'"/>
+      </xsl:call-template>
+      <xsl:call-template name="processBootstrapBorder">
+        <xsl:with-param name="attrValue" select="@border"/>
+      </xsl:call-template>
+      <xsl:call-template name="processBootstrapWidth">
+        <xsl:with-param name="attrValue" select="@width"/>
+      </xsl:call-template>
+      <xsl:call-template name="processBootstrapBorderColor">
+        <xsl:with-param name="attrValue" select="@bordercolor"/>
+      </xsl:call-template>
+      <xsl:call-template name="processBootstrapRounded">
+        <xsl:with-param name="attrValue" select="@rounded"/>
+      </xsl:call-template>
+      <xsl:call-template name="processBootstrapOutputClass">
+        <xsl:with-param name="attrValue" select="@outputclass"/>
+      </xsl:call-template>
+      <xsl:call-template name="processBootstrapDirection"/>
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+
+  <!-- Inline Ph Support -->
+  <xsl:template match="*[contains(@class, ' topic/ph ')]" priority="5">
+    <fo:inline>
+      <xsl:call-template name="commonattributes"/>
+      <xsl:call-template name="processBootstrapSpacing">
+        <xsl:with-param name="attrValue" select="@padding"/>
+        <xsl:with-param name="prefix" select="'p'"/>
+      </xsl:call-template>
+      <xsl:call-template name="processBootstrapSpacing">
+        <xsl:with-param name="attrValue" select="@margin"/>
+        <xsl:with-param name="prefix" select="'m'"/>
+      </xsl:call-template>
+      <xsl:call-template name="processBootstrapBorder">
+        <xsl:with-param name="attrValue" select="@border"/>
+      </xsl:call-template>
+      <xsl:call-template name="processBootstrapBorderColor">
+        <xsl:with-param name="attrValue" select="@bordercolor"/>
+      </xsl:call-template>
+      <xsl:call-template name="processBootstrapRounded">
+        <xsl:with-param name="attrValue" select="@rounded"/>
+      </xsl:call-template>
+      <xsl:call-template name="processBootstrapOutputClass">
+        <xsl:with-param name="attrValue" select="@outputclass"/>
+      </xsl:call-template>
+      <xsl:call-template name="processBootstrapDirection"/>
+      <xsl:apply-templates/>
+    </fo:inline>
+  </xsl:template>
+
+  <!-- Paragraph Support -->
+  <xsl:template match="*[contains(@class, ' topic/p ')]" priority="5">
+    <fo:block xsl:use-attribute-sets="p">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:call-template name="processBootstrapSpacing">
+        <xsl:with-param name="attrValue" select="@padding"/>
+        <xsl:with-param name="prefix" select="'p'"/>
+      </xsl:call-template>
+      <xsl:call-template name="processBootstrapSpacing">
+        <xsl:with-param name="attrValue" select="@margin"/>
+        <xsl:with-param name="prefix" select="'m'"/>
+      </xsl:call-template>
+      <xsl:call-template name="processBootstrapBorder">
+        <xsl:with-param name="attrValue" select="@border"/>
+      </xsl:call-template>
+      <xsl:call-template name="processBootstrapWidth">
+        <xsl:with-param name="attrValue" select="@width"/>
+      </xsl:call-template>
+      <xsl:call-template name="processBootstrapBorderColor">
+        <xsl:with-param name="attrValue" select="@bordercolor"/>
+      </xsl:call-template>
+      <xsl:call-template name="processBootstrapRounded">
+        <xsl:with-param name="attrValue" select="@rounded"/>
+      </xsl:call-template>
+      <xsl:call-template name="processBootstrapOutputClass">
+        <xsl:with-param name="attrValue" select="@outputclass"/>
+      </xsl:call-template>
+      <xsl:call-template name="processBootstrapDirection"/>
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+
+</xsl:stylesheet>
