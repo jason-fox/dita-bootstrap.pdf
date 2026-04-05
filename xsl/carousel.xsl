@@ -20,8 +20,9 @@
       <xsl:call-template name="processBootstrapWidth">
         <xsl:with-param name="attrValue" select="@width"/>
       </xsl:call-template>
+      <xsl:variable name="colCount" select="if (@cols) then xs:integer(@cols) else 3"/>
 
-      <!-- Identify all item-level content to be flattened into the 3-column grid -->
+      <!-- Identify all item-level content to be flattened into the grid -->
       <xsl:variable name="items" select="(*[contains(@class, ' bootstrap-d/carousel-item ')] | *[contains(@class, ' topic/li ')]) / (
           *[contains(@class, ' topic/image ')] | 
           *[contains(@class, ' topic/fig ')] | 
@@ -29,44 +30,64 @@
           *[not(contains(@class, ' topic/image ') or contains(@class, ' topic/fig ') or contains(@class, ' bootstrap-d/grid-row '))]
         )"/>
 
-      <xsl:if test="count($items) &lt; 10">
+      <xsl:if test="count($items) &lt;= ($colCount * 3)">
         <xsl:attribute name="keep-with-next">always</xsl:attribute>
         <xsl:attribute name="keep-together.within-page">always</xsl:attribute>
       </xsl:if>
 
-      <!-- Dynamic representation for print: A 3-column table -->
-      <fo:table table-layout="fixed" width="100%" border-collapse="separate" border-spacing="5pt">
-        <fo:table-column column-width="proportional-column-width(1)"/>
-        <fo:table-column column-width="proportional-column-width(1)"/>
-        <fo:table-column column-width="proportional-column-width(1)"/>
+      <!-- Dynamic representation for print: A table with variable columns -->
+      <fo:table table-layout="fixed" width="100%">
+        <xsl:choose>
+          <xsl:when test="$colCount = 1">
+            <xsl:attribute name="border-collapse">collapse</xsl:attribute>
+            <xsl:attribute name="border">1pt solid #dee2e6</xsl:attribute>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:attribute name="border-collapse">separate</xsl:attribute>
+            <xsl:attribute name="border-spacing">5pt</xsl:attribute>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:for-each select="1 to $colCount">
+           <fo:table-column column-width="proportional-column-width(1)"/>
+        </xsl:for-each>
         
         <fo:table-body>
-          <!-- The $items variable is now calculated at the start of the template -->
-
-          
-          <xsl:for-each select="$items[position() mod 3 = 1]">
+          <!-- Group items into rows based on colCount -->
+          <xsl:for-each select="if ($colCount = 1) then $items else $items[position() mod $colCount = 1]">
             <xsl:variable name="group-start-idx" select="position()"/>
-            <xsl:variable name="current-group" select="$items[position() &gt;= ($group-start-idx - 1) * 3 + 1 and position() &lt;= $group-start-idx * 3]"/>
+            <xsl:variable name="group-count" select="count($items)"/>
+            <xsl:variable name="current-group" select="$items[position() &gt;= ($group-start-idx - 1) * $colCount + 1 and position() &lt;= $group-start-idx * $colCount]"/>
             
             <fo:table-row>
               <xsl:for-each select="$current-group">
-                <fo:table-cell padding="5pt" border="1pt solid">
-                  <!-- Border color logic: carousel/@color or default grey -->
-                  <xsl:variable name="theme" select="ancestor::*[contains(@class, ' bootstrap-d/carousel ')][1]/@color"/>
+                <fo:table-cell padding="5pt">
                   <xsl:choose>
-                    <xsl:when test="$theme">
-                       <xsl:call-template name="processBootstrapBorderColor">
-                         <xsl:with-param name="attrValue" select="$theme"/>
-                       </xsl:call-template>
-                       <xsl:call-template name="processBootstrapAttrSetReflection">
-                          <xsl:with-param name="attrSet" select="concat('__bg__', $theme, '-subtle')"/>
-                       </xsl:call-template>
+                    <xsl:when test="$colCount = 1">
+                      <xsl:attribute name="padding">10pt</xsl:attribute>
+                      <xsl:if test="not($group-start-idx + count($current-group) - 1 = $group-count)">
+                        <xsl:attribute name="border-bottom">1pt solid #dee2e6</xsl:attribute>
+                      </xsl:if>
                     </xsl:when>
                     <xsl:otherwise>
-                      <xsl:attribute name="border-color">#dee2e6</xsl:attribute>
+                      <xsl:attribute name="border">1pt solid</xsl:attribute>
+                      <xsl:attribute name="fox:border-radius">4pt</xsl:attribute>
+                      <!-- Border color logic: carousel/@color or default grey -->
+                      <xsl:variable name="theme" select="ancestor::*[contains(@class, ' bootstrap-d/carousel ')][1]/@color"/>
+                      <xsl:choose>
+                        <xsl:when test="$theme">
+                           <xsl:call-template name="processBootstrapBorderColor">
+                             <xsl:with-param name="attrValue" select="$theme"/>
+                           </xsl:call-template>
+                           <xsl:call-template name="processBootstrapAttrSetReflection">
+                              <xsl:with-param name="attrSet" select="concat('__bg__', $theme, '-subtle')"/>
+                           </xsl:call-template>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <xsl:attribute name="border-color">#dee2e6</xsl:attribute>
+                        </xsl:otherwise>
+                      </xsl:choose>
                     </xsl:otherwise>
                   </xsl:choose>
-                  <xsl:attribute name="fox:border-radius">4pt</xsl:attribute>
 
                   <fo:block start-indent="0pt">
                     <xsl:choose>
@@ -96,9 +117,9 @@
                 </fo:table-cell>
               </xsl:for-each>
               
-              <!-- Fill remaining columns with empty cells (no border for these?) -->
-              <xsl:if test="count($current-group) &lt; 3">
-                <xsl:for-each select="1 to (3 - count($current-group))">
+              <!-- Fill remaining columns with empty cells -->
+              <xsl:if test="count($current-group) &lt; $colCount">
+                <xsl:for-each select="1 to ($colCount - count($current-group))">
                   <fo:table-cell><fo:block/></fo:table-cell>
                 </xsl:for-each>
               </xsl:if>
