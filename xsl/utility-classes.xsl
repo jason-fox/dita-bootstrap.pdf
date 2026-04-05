@@ -4,6 +4,8 @@
                 xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
                 version="2.0">
 
+  <xsl:param name="BOOTSTRAP_ICONS_INCLUDE" select="'yes'"/>
+
   <!-- Reflection Template for Bootstrap Attribute Sets -->
   <xsl:template name="processBootstrapAttrSetReflection">
     <xsl:param name="attrSet"/>

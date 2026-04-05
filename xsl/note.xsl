@@ -65,6 +65,62 @@
       </xsl:if>
 
       <xsl:call-template name="processBootstrapDirection"/>
+
+      <!-- Determine text color for the icon from the theme-subtle attribute set -->
+      <xsl:variable name="icon-color">
+         <xsl:variable name="attrSet" select="concat('__bg__', $theme, '-subtle')"/>
+         <xsl:value-of select="document('../cfg/fo/attrs/bootstrap-attr.xsl')//xsl:attribute-set[@name = $attrSet]/xsl:attribute[@name = 'color']"/>
+      </xsl:variable>
+
+      <!-- Note Title / Icon Prefix -->
+      <fo:inline font-weight="bold">
+        <xsl:variable name="type" select="(@type, 'note')[1]"/>
+        <xsl:variable name="explicit-icon" select="(@icon, (@otherprops[contains(., 'icon(')], '')[1])[1]"/>
+
+        <xsl:if test="$BOOTSTRAP_ICONS_INCLUDE = 'yes' and ($explicit-icon != '' or ($type != 'othertype' and $type != 'other'))">
+          <xsl:variable name="icon-name">
+            <xsl:choose>
+              <xsl:when test="$explicit-icon != ''">
+                 <xsl:variable name="raw" select="(tokenize($explicit-icon, ' ')[starts-with(., 'bi-')], tokenize($explicit-icon, ' ')[. != 'bi'])[1]"/>
+                 <xsl:value-of select="if (starts-with($raw, 'bi-')) then $raw else concat('bi-', $raw)"/>
+              </xsl:when>
+              <xsl:when test="$type = 'tip'">bi-lightbulb</xsl:when>
+              <xsl:when test="$type = 'fastpath'">bi-shield-check</xsl:when>
+              <xsl:when test="$type = 'remember'">bi-clipboard-check</xsl:when>
+              <xsl:when test="$type = 'restriction'">bi-slash-circle</xsl:when>
+              <xsl:when test="$type = 'important'">bi-exclamation-circle-fill</xsl:when>
+              <xsl:when test="$type = 'attention'">bi-exclamation-triangle</xsl:when>
+              <xsl:when test="$type = 'caution'">bi-exclamation-triangle</xsl:when>
+              <xsl:when test="$type = 'warning'">bi-exclamation-triangle</xsl:when>
+              <xsl:when test="$type = 'trouble'">bi-exclamation-triangle</xsl:when>
+              <xsl:when test="$type = 'danger'">bi-exclamation-triangle</xsl:when>
+              <xsl:when test="$type = 'notice'">bi-info-circle-fill</xsl:when>
+              <xsl:when test="$type = 'note'">bi-pencil</xsl:when>
+              <xsl:otherwise>bi-info-circle</xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          
+          <xsl:variable name="temp-icon">
+            <icon class="+ topic/ph bootstrap-d/icon " outputclass="{$icon-name}" padding="e2"/>
+          </xsl:variable>
+          <xsl:apply-templates select="$temp-icon/*">
+             <xsl:with-param name="color" select="$icon-color"/>
+          </xsl:apply-templates>
+        </xsl:if>
+        
+        <xsl:variable name="type" select="(@type, 'note')[1]"/>
+        <xsl:variable name="label">
+           <xsl:call-template name="getVariable">
+              <xsl:with-param name="id" select="concat(upper-case(substring($type, 1, 1)), substring($type, 2))"/>
+           </xsl:call-template>
+        </xsl:variable>
+        <xsl:value-of select="$label"/>
+        <xsl:call-template name="getVariable">
+           <xsl:with-param name="id" select="'ColonSymbol'"/>
+        </xsl:call-template>
+      </fo:inline>
+      <xsl:text>&#160;</xsl:text>
+
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>

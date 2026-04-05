@@ -19,6 +19,7 @@
   <xsl:include href="card.xsl"/>
   <xsl:include href="figure.xsl"/>
   <xsl:include href="grid.xsl"/>
+  <xsl:include href="icon.xsl"/>
   <xsl:include href="note.xsl"/>
 
 </xsl:stylesheet>

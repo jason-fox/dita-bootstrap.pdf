@@ -28,10 +28,22 @@
 
   <!-- Button Group Support (Standard) -->
   <xsl:template match="*[contains(@class, ' bootstrap-d/button-group ')]" priority="10">
-    <fo:inline>
+    <xsl:variable name="content">
       <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates/>
-    </fo:inline>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="@vertical = 'yes'">
+        <fo:block>
+          <xsl:copy-of select="$content"/>
+        </fo:block>
+      </xsl:when>
+      <xsl:otherwise>
+        <fo:inline>
+          <xsl:copy-of select="$content"/>
+        </fo:inline>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <!-- Button Support -->
@@ -122,30 +134,56 @@
       <xsl:if test="parent::*[contains(@class, ' bootstrap-d/button-group ')]">
         <xsl:variable name="is-first" select="not(preceding-sibling::*[contains(@class, ' bootstrap-d/button ')])"/>
         <xsl:variable name="is-last" select="not(following-sibling::*[contains(@class, ' bootstrap-d/button ')])"/>
+        <xsl:variable name="is-vertical" select="parent::*/@vertical = 'yes'"/>
         <xsl:choose>
           <!-- Single item: Keep all rounding, zero margins -->
           <xsl:when test="$is-first and $is-last">
-            <xsl:attribute name="margin-left">0pt</xsl:attribute>
-            <xsl:attribute name="margin-right">0pt</xsl:attribute>
+            <xsl:attribute name="margin">0pt</xsl:attribute>
           </xsl:when>
-          <!-- Middle item: No rounded corners, overlapping margins -->
-          <xsl:when test="not($is-first) and not($is-last)">
-            <xsl:attribute name="fox:border-radius">0</xsl:attribute>
-            <xsl:attribute name="margin-left">-1pt</xsl:attribute>
-            <xsl:attribute name="margin-right">-1pt</xsl:attribute>
+          <!-- Vertical Orientation -->
+          <xsl:when test="$is-vertical">
+            <xsl:choose>
+              <xsl:when test="not($is-first) and not($is-last)">
+                <xsl:attribute name="fox:border-radius">0</xsl:attribute>
+                <xsl:attribute name="margin-top">-1pt</xsl:attribute>
+                <xsl:attribute name="margin-bottom">-1pt</xsl:attribute>
+              </xsl:when>
+              <xsl:when test="$is-first">
+                <xsl:attribute name="fox:border-after-start-radius">0</xsl:attribute>
+                <xsl:attribute name="fox:border-after-end-radius">0</xsl:attribute>
+                <xsl:attribute name="margin-top">0pt</xsl:attribute>
+                <xsl:attribute name="margin-bottom">-1pt</xsl:attribute>
+              </xsl:when>
+              <xsl:when test="$is-last">
+                <xsl:attribute name="fox:border-before-start-radius">0</xsl:attribute>
+                <xsl:attribute name="fox:border-before-end-radius">0</xsl:attribute>
+                <xsl:attribute name="margin-top">-1pt</xsl:attribute>
+                <xsl:attribute name="margin-bottom">0pt</xsl:attribute>
+              </xsl:when>
+            </xsl:choose>
           </xsl:when>
-          <xsl:when test="$is-first">
-            <xsl:attribute name="fox:border-before-end-radius">0</xsl:attribute>
-            <xsl:attribute name="fox:border-after-end-radius">0</xsl:attribute>
-            <xsl:attribute name="margin-left">0pt</xsl:attribute>
-            <xsl:attribute name="margin-right">-1pt</xsl:attribute>
-          </xsl:when>
-          <xsl:when test="$is-last">
-            <xsl:attribute name="fox:border-before-start-radius">0</xsl:attribute>
-            <xsl:attribute name="fox:border-after-start-radius">0</xsl:attribute>
-            <xsl:attribute name="margin-left">-1pt</xsl:attribute>
-            <xsl:attribute name="margin-right">0pt</xsl:attribute>
-          </xsl:when>
+          <!-- Horizontal Orientation (Default) -->
+          <xsl:otherwise>
+            <xsl:choose>
+              <xsl:when test="not($is-first) and not($is-last)">
+                <xsl:attribute name="fox:border-radius">0</xsl:attribute>
+                <xsl:attribute name="margin-left">-1pt</xsl:attribute>
+                <xsl:attribute name="margin-right">-1pt</xsl:attribute>
+              </xsl:when>
+              <xsl:when test="$is-first">
+                <xsl:attribute name="fox:border-before-end-radius">0</xsl:attribute>
+                <xsl:attribute name="fox:border-after-end-radius">0</xsl:attribute>
+                <xsl:attribute name="margin-left">0pt</xsl:attribute>
+                <xsl:attribute name="margin-right">-1pt</xsl:attribute>
+              </xsl:when>
+              <xsl:when test="$is-last">
+                <xsl:attribute name="fox:border-before-start-radius">0</xsl:attribute>
+                <xsl:attribute name="fox:border-after-start-radius">0</xsl:attribute>
+                <xsl:attribute name="margin-left">-1pt</xsl:attribute>
+                <xsl:attribute name="margin-right">0pt</xsl:attribute>
+              </xsl:when>
+            </xsl:choose>
+          </xsl:otherwise>
         </xsl:choose>
       </xsl:if>
 
