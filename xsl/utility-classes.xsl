@@ -204,7 +204,7 @@
   <!-- Baseline Section and Div Support -->
   <xsl:template match="*[contains(@class, ' topic/section ') or 
                          contains(@class, ' topic/div ') or 
-                         contains(@class, ' topic/bodydiv ')]" priority="5">
+                         contains(@class, ' topic/bodydiv ')]">
     <fo:block>
       <xsl:call-template name="commonattributes"/>
       <xsl:if test="@color">
@@ -244,7 +244,7 @@
   </xsl:template>
 
   <!-- Inline Ph Support -->
-  <xsl:template match="*[contains(@class, ' topic/ph ')]" priority="5">
+  <xsl:template match="*[contains(@class, ' topic/ph ')]">
     <fo:inline>
       <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="processBootstrapSpacing">
@@ -273,7 +273,7 @@
   </xsl:template>
 
   <!-- Paragraph Support -->
-  <xsl:template match="*[contains(@class, ' topic/p ')]" priority="5">
+  <xsl:template match="*[contains(@class, ' topic/p ')]">
     <fo:block xsl:use-attribute-sets="p">
       <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="processBootstrapSpacing">
@@ -305,7 +305,7 @@
   </xsl:template>
 
   <!-- Blockquote (lq) Support -->
-  <xsl:template match="*[contains(@class, ' topic/lq ')]" priority="5">
+  <xsl:template match="*[contains(@class, ' topic/lq ')]">
     <fo:block margin-bottom="12pt">
       <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="processBootstrapOutputClass">
@@ -325,7 +325,7 @@
   </xsl:template>
 
   <!-- Unstyled List Support (ul and ol) -->
-  <xsl:template match="*[contains(@class, ' topic/ul ') or contains(@class, ' topic/ol ')][tokenize(@outputclass, ' ') = 'list-unstyled']" priority="10">
+  <xsl:template match="*[contains(@class, ' topic/ul ') or contains(@class, ' topic/ol ')][tokenize(@outputclass, ' ') = 'list-unstyled']" >
     <fo:block margin-bottom="12pt">
       <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="processBootstrapDirection"/>
@@ -341,7 +341,7 @@
   </xsl:template>
 
   <!-- Inline List Support (ul and ol) -->
-  <xsl:template match="*[contains(@class, ' topic/ul ') or contains(@class, ' topic/ol ')][tokenize(@outputclass, ' ') = 'list-inline']" priority="10">
+  <xsl:template match="*[contains(@class, ' topic/ul ') or contains(@class, ' topic/ol ')][tokenize(@outputclass, ' ') = 'list-inline']">
     <fo:block margin-bottom="12pt">
       <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="processBootstrapDirection"/>
@@ -356,8 +356,8 @@
     </fo:inline>
   </xsl:template>
 
-  <!-- Suppress images used for dark/light mode switching in print -->
-  <xsl:template match="*[contains(@class, ' topic/image ')][tokenize(@outputclass, ' ') = 'd-light' or tokenize(@outputclass, ' ') = 'd-dark']" priority="10"/>
+  <!-- Suppress any elements used for dark/light mode switching in print -->
+  <xsl:template match="*[tokenize(normalize-space(@outputclass), ' ') = 'd-light' or tokenize(normalize-space(@outputclass), ' ') = 'd-dark']" priority="100"/>
 
   <!-- Only render the first image within a picture element -->
   <xsl:template match="*[contains(@class, ' bootstrap-d/picture ')]" priority="10">
@@ -365,6 +365,36 @@
       <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates select="*[contains(@class, ' topic/image ')][1]"/>
     </fo:block>
+  </xsl:template>
+
+  <!-- Thumbnail Support -->
+  <xsl:template match="*[contains(@class, ' bootstrap-d/thumbnail ')]" priority="10">
+    <xsl:if test="not(tokenize(@outputclass, ' ') = 'd-light' or tokenize(@outputclass, ' ') = 'd-dark')">
+      <xsl:variable name="content">
+        <fo:external-graphic src="url({@href})" content-width="scale-to-fit" scaling="uniform">
+           <xsl:call-template name="commonattributes"/>
+           <xsl:if test="@height"><xsl:attribute name="height" select="@height"/></xsl:if>
+           <xsl:if test="@width"><xsl:attribute name="width" select="@width"/></xsl:if>
+        </fo:external-graphic>
+      </xsl:variable>
+
+      <xsl:choose>
+         <xsl:when test="@placement = 'break'">
+            <fo:block-container width="auto" margin-bottom="12pt" border="1pt solid #dee2e6" padding="4pt" background-color="#ffffff" fox:border-radius="4pt">
+               <fo:block line-height="0">
+                  <xsl:copy-of select="$content"/>
+               </fo:block>
+            </fo:block-container>
+         </xsl:when>
+         <xsl:otherwise>
+            <fo:inline-container vertical-align="middle" border="1pt solid #dee2e6" padding="4pt" background-color="#ffffff" fox:border-radius="4pt">
+               <fo:block line-height="0">
+                  <xsl:copy-of select="$content"/>
+               </fo:block>
+            </fo:inline-container>
+         </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
   </xsl:template>
 
 </xsl:stylesheet>
