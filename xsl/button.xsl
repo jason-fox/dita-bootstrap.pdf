@@ -108,7 +108,14 @@
         </xsl:when>
         <xsl:otherwise>
           <xsl:attribute name="font-size">11pt</xsl:attribute>
-          <xsl:attribute name="padding">3pt 8pt</xsl:attribute>
+          <xsl:choose>
+             <xsl:when test="contains(@outputclass, 'btn-floating')">
+                <xsl:attribute name="padding">6pt</xsl:attribute>
+             </xsl:when>
+             <xsl:otherwise>
+                <xsl:attribute name="padding">3pt 8pt</xsl:attribute>
+             </xsl:otherwise>
+          </xsl:choose>
         </xsl:otherwise>
       </xsl:choose>
 
@@ -192,7 +199,10 @@
       </xsl:call-template>
 
       <!-- 5. Content handling - ensure we only process the intended label -->
-      <fo:inline baseline-shift="0.5pt">
+      <fo:inline>
+        <xsl:if test="normalize-space() != '' and not(contains(@outputclass, 'btn-floating'))">
+          <xsl:attribute name="baseline-shift">0.5pt</xsl:attribute>
+        </xsl:if>
         <xsl:choose>
           <!-- If button has explicit child text or formatting elements, use those -->
           <xsl:when test="node()[not(self::processing-instruction('ditaot'))]">

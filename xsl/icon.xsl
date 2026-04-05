@@ -51,14 +51,30 @@
       
       <!-- Use instream-foreign-object and forcefully inject the target color into the SVG -->
       <fo:instream-foreign-object content-height="1.1em" 
-                                  content-width="auto" 
-                                  baseline-shift="-10%">
+                                  content-width="auto">
+        <xsl:attribute name="baseline-shift">
+           <xsl:choose>
+              <!-- If icon is solo in a button/badge, don't shift (to keep it centered) -->
+              <xsl:when test="ancestor::*[contains(@class, ' bootstrap-d/button ') or contains(@class, ' bootstrap-d/badge ')][not(normalize-space() != '')]">0</xsl:when>
+              <xsl:otherwise>-10%</xsl:otherwise>
+           </xsl:choose>
+        </xsl:attribute>
         <xsl:call-template name="processBootstrapSpacing">
           <xsl:with-param name="attrValue" select="@margin"/>
           <xsl:with-param name="prefix" select="'m'"/>
         </xsl:call-template>
         <xsl:call-template name="processBootstrapSpacing">
-          <xsl:with-param name="attrValue" select="(@padding, if (following-sibling::node()[normalize-space() != '']) then 'e2' else '0')[1]"/>
+          <xsl:with-param name="attrValue">
+             <xsl:variable name="has-preceding" select="preceding-sibling::node()[normalize-space() != '']"/>
+             <xsl:variable name="has-following" select="following-sibling::node()[normalize-space() != '']"/>
+             <xsl:choose>
+                <xsl:when test="@padding"><xsl:value-of select="@padding"/></xsl:when>
+                <xsl:when test="$has-preceding and $has-following">x2</xsl:when>
+                <xsl:when test="$has-following">e2</xsl:when>
+                <xsl:when test="$has-preceding">s2</xsl:when>
+                <xsl:otherwise><!-- Solo icon: No padding --></xsl:otherwise>
+             </xsl:choose>
+          </xsl:with-param>
           <xsl:with-param name="prefix" select="'p'"/>
         </xsl:call-template>
         <xsl:apply-templates select="document($icon-src)/*" mode="color-icon">

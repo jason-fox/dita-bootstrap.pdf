@@ -110,9 +110,16 @@
         
         <xsl:variable name="type" select="(@type, 'note')[1]"/>
         <xsl:variable name="label">
-           <xsl:call-template name="getVariable">
-              <xsl:with-param name="id" select="concat(upper-case(substring($type, 1, 1)), substring($type, 2))"/>
-           </xsl:call-template>
+           <xsl:choose>
+              <xsl:when test="($type = 'other' or $type = 'othertype') and @othertype">
+                 <xsl:value-of select="@othertype"/>
+              </xsl:when>
+              <xsl:otherwise>
+                 <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="concat(upper-case(substring($type, 1, 1)), substring($type, 2))"/>
+                 </xsl:call-template>
+              </xsl:otherwise>
+           </xsl:choose>
         </xsl:variable>
         <xsl:value-of select="$label"/>
         <xsl:call-template name="getVariable">
