@@ -304,4 +304,67 @@
     </fo:block>
   </xsl:template>
 
+  <!-- Blockquote (lq) Support -->
+  <xsl:template match="*[contains(@class, ' topic/lq ')]" priority="5">
+    <fo:block margin-bottom="12pt">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:call-template name="processBootstrapOutputClass">
+        <xsl:with-param name="attrValue" select="@outputclass"/>
+      </xsl:call-template>
+      <xsl:call-template name="processBootstrapDirection"/>
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+
+  <!-- Text/Paragraphs within Blockquote (lq) -->
+  <xsl:template match="*[contains(@class, ' topic/lq ')]/*[contains(@class, ' topic/p ')]" priority="10">
+    <fo:block font-size="15pt" margin-bottom="12pt" line-height="1.5">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+
+  <!-- Unstyled List Support (ul and ol) -->
+  <xsl:template match="*[contains(@class, ' topic/ul ') or contains(@class, ' topic/ol ')][tokenize(@outputclass, ' ') = 'list-unstyled']" priority="10">
+    <fo:block margin-bottom="12pt">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:call-template name="processBootstrapDirection"/>
+      <xsl:apply-templates select="*[contains(@class, ' topic/li ')]" mode="list-unstyled"/>
+    </fo:block>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' topic/li ')]" mode="list-unstyled">
+    <fo:block margin-left="0pt" margin-bottom="3pt">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+
+  <!-- Inline List Support (ul and ol) -->
+  <xsl:template match="*[contains(@class, ' topic/ul ') or contains(@class, ' topic/ol ')][tokenize(@outputclass, ' ') = 'list-inline']" priority="10">
+    <fo:block margin-bottom="12pt">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:call-template name="processBootstrapDirection"/>
+      <xsl:apply-templates select="*[contains(@class, ' topic/li ')]" mode="list-inline"/>
+    </fo:block>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' topic/li ')]" mode="list-inline">
+    <fo:inline padding-right="8pt">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates/>
+    </fo:inline>
+  </xsl:template>
+
+  <!-- Suppress images used for dark/light mode switching in print -->
+  <xsl:template match="*[contains(@class, ' topic/image ')][tokenize(@outputclass, ' ') = 'd-light' or tokenize(@outputclass, ' ') = 'd-dark']" priority="10"/>
+
+  <!-- Only render the first image within a picture element -->
+  <xsl:template match="*[contains(@class, ' bootstrap-d/picture ')]" priority="10">
+    <fo:block>
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates select="*[contains(@class, ' topic/image ')][1]"/>
+    </fo:block>
+  </xsl:template>
+
 </xsl:stylesheet>

@@ -13,6 +13,7 @@
   <xsl:include href="utility-classes.xsl"/>
 
   <!-- Component Specific Modules -->
+  <xsl:include href="accordion.xsl"/>
   <xsl:include href="alert.xsl"/>
   <xsl:include href="button.xsl"/>
   <xsl:include href="badge.xsl"/>
@@ -20,6 +21,7 @@
   <xsl:include href="figure.xsl"/>
   <xsl:include href="grid.xsl"/>
   <xsl:include href="icon.xsl"/>
+  <xsl:include href="list-group.xsl"/>
   <xsl:include href="note.xsl"/>
 
 </xsl:stylesheet>
