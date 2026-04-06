@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:fo="http://www.w3.org/1999/XSL/Format"
-                xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
-                version="2.0">
+<xsl:stylesheet
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
+  version="2.0"
+>
 
   <!-- Note Support (Styled as Bootstrap Alerts) -->
   <xsl:template match="*[contains(@class, ' topic/note ')]" priority="5">
@@ -19,7 +21,9 @@
               <xsl:when test="$type = 'note' or $type = 'notice' or $type = 'remember'">info</xsl:when>
               <xsl:when test="$type = 'tip' or $type = 'fastpath'">success</xsl:when>
               <xsl:when test="$type = 'important'">primary</xsl:when>
-              <xsl:when test="$type = 'warning' or $type = 'caution' or $type = 'restriction' or $type = 'trouble'">warning</xsl:when>
+              <xsl:when
+                test="$type = 'warning' or $type = 'caution' or $type = 'restriction' or $type = 'trouble'"
+              >warning</xsl:when>
               <xsl:when test="$type = 'danger'">danger</xsl:when>
               <xsl:otherwise>secondary</xsl:otherwise>
             </xsl:choose>
@@ -69,7 +73,9 @@
       <!-- Determine text color for the icon from the theme-subtle attribute set -->
       <xsl:variable name="icon-color">
          <xsl:variable name="attrSet" select="concat('__bg__', $theme, '-subtle')"/>
-         <xsl:value-of select="document('../cfg/fo/attrs/bootstrap-attr.xsl')//xsl:attribute-set[@name = $attrSet]/xsl:attribute[@name = 'color']"/>
+         <xsl:value-of
+          select="document('../../cfg/fo/attrs/bootstrap-attr.xsl')//xsl:attribute-set[@name = $attrSet]/xsl:attribute[@name = 'color']"
+        />
       </xsl:variable>
 
       <!-- Note Title / Icon Prefix -->
@@ -77,11 +83,16 @@
         <xsl:variable name="type" select="(@type, 'note')[1]"/>
         <xsl:variable name="explicit-icon" select="(@icon, (@otherprops[contains(., 'icon(')], '')[1])[1]"/>
 
-        <xsl:if test="$BOOTSTRAP_ICONS_INCLUDE = 'yes' and ($explicit-icon != '' or ($type != 'othertype' and $type != 'other'))">
+        <xsl:if
+          test="$BOOTSTRAP_ICONS_INCLUDE = 'yes' and ($explicit-icon != '' or ($type != 'othertype' and $type != 'other'))"
+        >
           <xsl:variable name="icon-name">
             <xsl:choose>
               <xsl:when test="$explicit-icon != ''">
-                 <xsl:variable name="raw" select="(tokenize($explicit-icon, ' ')[starts-with(., 'bi-')], tokenize($explicit-icon, ' ')[. != 'bi'])[1]"/>
+                 <xsl:variable
+                  name="raw"
+                  select="(tokenize($explicit-icon, ' ')[starts-with(., 'bi-')], tokenize($explicit-icon, ' ')[. != 'bi'])[1]"
+                />
                  <xsl:value-of select="if (starts-with($raw, 'bi-')) then $raw else concat('bi-', $raw)"/>
               </xsl:when>
               <xsl:when test="$type = 'tip'">bi-lightbulb</xsl:when>

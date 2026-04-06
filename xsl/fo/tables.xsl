@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:fo="http://www.w3.org/1999/XSL/Format"
-                xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
-                exclude-result-prefixes="xs dita-ot"
-                version="2.0">
+<xsl:stylesheet
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  exclude-result-prefixes="xs dita-ot"
+  version="2.0"
+>
 
   <!-- 
     Table Support for Bootstrap Print
@@ -35,9 +37,12 @@
       <xsl:call-template name="commonattributes"/>
       
       <!-- Preference: row/@color > thead/@color > table/@color -->
-      <xsl:variable name="theme" select="(@color, 
+      <xsl:variable
+        name="theme"
+        select="(@color, 
                                           parent::*[contains(@class, ' topic/thead ')]/@color, 
-                                          ancestor::*[contains(@class, ' topic/table ')][1]/@color)[1]"/>
+                                          ancestor::*[contains(@class, ' topic/table ')][1]/@color)[1]"
+      />
       
       <xsl:if test="$theme">
         <!-- Header takes the main theme color (solid background) -->
@@ -46,7 +51,10 @@
         </xsl:call-template>
         <!-- Ensure high-contrast text color for header -->
         <xsl:call-template name="processBootstrapAttrSetReflection">
-          <xsl:with-param name="attrSet" select="concat('__color__', if ($theme = 'warning' or $theme = 'light') then 'dark' else 'white')"/>
+          <xsl:with-param
+            name="attrSet"
+            select="concat('__color__', if ($theme = 'warning' or $theme = 'light') then 'dark' else 'white')"
+          />
         </xsl:call-template>
       </xsl:if>
       
@@ -97,16 +105,28 @@
   
   <!-- 3. Entry styling to handle border colors, cell backgrounds, striping and dividends -->
   <xsl:template match="*[contains(@class, ' topic/entry ')]" priority="5">
-    <xsl:variable name="isHeader" select="parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]"/>
-    <xsl:variable name="isFooter" select="parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/tfoot ')]"/>
+    <xsl:variable
+      name="isHeader"
+      select="parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]"
+    />
+    <xsl:variable
+      name="isFooter"
+      select="parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/tfoot ')]"
+    />
     <xsl:variable name="table" select="ancestor::*[contains(@class, ' topic/table ')][1]"/>
     <xsl:variable name="tableTheme" select="$table/@color"/>
     <xsl:variable name="stripedCols" select="$table/@striped-columns = 'yes'"/>
     
     <xsl:variable name="colIndex" select="if (@dita-ot:x) then xs:integer(@dita-ot:x) else 0"/>
-    <xsl:variable name="isColoredCol" select="$stripedCols and ($colIndex mod 2 = 0) and not($isHeader) and not($isFooter)"/>
+    <xsl:variable
+      name="isColoredCol"
+      select="$stripedCols and ($colIndex mod 2 = 0) and not($isHeader) and not($isFooter)"
+    />
     
-    <xsl:variable name="isGroupDivider" select="$table/@divider = 'yes' and not(parent::*/preceding-sibling::*[contains(@class, ' topic/row ')]) and (parent::*/parent::*[contains(@class, ' topic/tbody ')] or parent::*/parent::*[contains(@class, ' topic/tfoot ')])"/>
+    <xsl:variable
+      name="isGroupDivider"
+      select="$table/@divider = 'yes' and not(parent::*/preceding-sibling::*[contains(@class, ' topic/row ')]) and (parent::*/parent::*[contains(@class, ' topic/tbody ')] or parent::*/parent::*[contains(@class, ' topic/tfoot ')])"
+    />
 
     <fo:table-cell>
       <xsl:call-template name="commonattributes"/>
@@ -165,7 +185,10 @@
            </xsl:call-template>
            <xsl:if test="$isHeader">
                <xsl:call-template name="processBootstrapAttrSetReflection">
-                 <xsl:with-param name="attrSet" select="concat('__color__', if (@color = 'warning' or @color = 'light') then 'dark' else 'white')"/>
+                 <xsl:with-param
+                name="attrSet"
+                select="concat('__color__', if (@color = 'warning' or @color = 'light') then 'dark' else 'white')"
+              />
                </xsl:call-template>
            </xsl:if>
         </xsl:when>
@@ -194,7 +217,9 @@
               <xsl:call-template name="get-attributes">
                 <xsl:with-param name="element" as="element()">
                   <xsl:choose>
-                    <xsl:when test="$isHeader"><placeholder xsl:use-attribute-sets="thead.row.entry__content"/></xsl:when>
+                    <xsl:when test="$isHeader"><placeholder
+                        xsl:use-attribute-sets="thead.row.entry__content"
+                      /></xsl:when>
                     <xsl:otherwise><placeholder xsl:use-attribute-sets="tbody.row.entry__content"/></xsl:otherwise>
                   </xsl:choose>
                 </xsl:with-param>

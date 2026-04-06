@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:fo="http://www.w3.org/1999/XSL/Format"
-                xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
-                version="2.0">
+<xsl:stylesheet
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
+  version="2.0"
+>
 
   <!-- Grid Row Handling -->
   <!-- A grid-row is a table of one row with 12 columns. -->
@@ -73,7 +75,10 @@
        Actually, grid-row template uses a single fo:table-row and 
        apply-templates. If a child is not a grid-col, it will break FO table rules!
   -->
-  <xsl:template match="*[contains(@class, ' bootstrap-d/grid-row ')]/*[not(contains(@class, ' bootstrap-d/grid-col '))]" priority="5">
+  <xsl:template
+    match="*[contains(@class, ' bootstrap-d/grid-row ')]/*[not(contains(@class, ' bootstrap-d/grid-col '))]"
+    priority="5"
+  >
      <!-- Should we wrap non-grid-col components in a full-width cell? -->
      <fo:table-cell number-columns-spanned="12" padding-left="12pt" padding-right="12pt">
         <fo:block start-indent="0pt">

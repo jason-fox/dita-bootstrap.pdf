@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:fo="http://www.w3.org/1999/XSL/Format"
-                xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
-                xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
-                exclude-result-prefixes="opentopic-func fox"
-                version="2.0">
+<xsl:stylesheet
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
+  xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
+  exclude-result-prefixes="opentopic-func fox"
+  version="2.0"
+>
 
   <!-- Button Toolbar Support (Single Row Block) -->
   <xsl:template match="*[contains(@class, ' bootstrap-d/button-toolbar ')]" priority="5">
@@ -33,7 +35,10 @@
         <xsl:when test="$is-vertical">
           <!-- Width calculation based on string length -->
           <xsl:variable name="max-chars">
-             <xsl:variable name="lengths" select="for $b in *[contains(@class, ' bootstrap-d/button ')] return string-length(normalize-space($b))"/>
+             <xsl:variable
+            name="lengths"
+            select="for $b in *[contains(@class, ' bootstrap-d/button ')] return string-length(normalize-space($b))"
+          />
              <xsl:value-of select="if (empty($lengths)) then 0 else max($lengths)"/>
           </xsl:variable>
           
@@ -75,7 +80,10 @@
 
   <!-- Button Support -->
   <xsl:template match="*[contains(@class, ' bootstrap-d/button ')]" priority="5">
-    <xsl:variable name="is-vertical" select="ancestor::*[contains(@class, ' bootstrap-d/button-group ')][1]/@vertical = 'yes'"/>
+    <xsl:variable
+      name="is-vertical"
+      select="ancestor::*[contains(@class, ' bootstrap-d/button-group ')][1]/@vertical = 'yes'"
+    />
     <xsl:variable name="element" select="if ($is-vertical) then 'fo:block' else 'fo:inline'"/>
 
     <fo:basic-link xsl:use-attribute-sets="xref">
@@ -110,7 +118,10 @@
               <xsl:with-param name="attrSet" select="concat('__bg__', $theme)"/>
             </xsl:call-template>
             <xsl:call-template name="processBootstrapAttrSetReflection">
-              <xsl:with-param name="attrSet" select="concat('__color__', if ($theme = 'warning' or $theme = 'light') then 'dark' else 'white')"/>
+              <xsl:with-param
+                name="attrSet"
+                select="concat('__color__', if ($theme = 'warning' or $theme = 'light') then 'dark' else 'white')"
+              />
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
@@ -272,7 +283,11 @@
   </xsl:template>
 
   <!-- Explicitly suppress metadata elements in button labels -->
-  <xsl:template match="*[contains(@class, ' topic/desc ') or contains(@class, ' topic/shortdesc ')]" mode="button-label" priority="5"/>
+  <xsl:template
+    match="*[contains(@class, ' topic/desc ') or contains(@class, ' topic/shortdesc ')]"
+    mode="button-label"
+    priority="5"
+  />
 
   <!-- Suppress any dita-ot internal processing instructions -->
   <xsl:template match="processing-instruction()" mode="button-label" priority="5"/>

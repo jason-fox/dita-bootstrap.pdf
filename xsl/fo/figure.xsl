@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:fo="http://www.w3.org/1999/XSL/Format"
-                xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
-                xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
-                xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
-                exclude-result-prefixes="xs opentopic-func dita-ot"
-                version="2.0">
+<xsl:stylesheet
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  exclude-result-prefixes="xs opentopic-func dita-ot"
+  version="2.0"
+>
 
   <!-- Figure Component Handling -->
   <!-- Aggressive priority="100" to override any other plugin or base templates. -->
@@ -57,7 +59,13 @@
         </xsl:choose>
       </xsl:variable>
 
-      <fo:external-graphic src="url('{$resolved-href}')" content-width="scale-to-fit" width="100%" height="auto" scaling="uniform">
+      <fo:external-graphic
+        src="url('{$resolved-href}')"
+        content-width="scale-to-fit"
+        width="100%"
+        height="auto"
+        scaling="uniform"
+      >
         <xsl:call-template name="commonattributes"/>
       </fo:external-graphic>
     </fo:block>

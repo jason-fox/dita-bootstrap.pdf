@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:fo="http://www.w3.org/1999/XSL/Format"
-                version="2.0">
+<xsl:stylesheet
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  version="2.0"
+>
 
   <!-- Badge Support -->
-  <xsl:template match="*[contains(@class, ' bootstrap-d/badge ') or (contains(@class,' topic/ph ') and contains(@outputclass, 'badge'))]" priority="100">
+  <xsl:template
+    match="*[contains(@class, ' bootstrap-d/badge ') or (contains(@class,' topic/ph ') and contains(@outputclass, 'badge'))]"
+    priority="100"
+  >
     <fo:inline>
       <xsl:call-template name="commonattributes"/>
       
@@ -16,7 +21,10 @@
         <xsl:with-param name="attrSet" select="concat('__bg__', $theme)"/>
       </xsl:call-template>
       <xsl:call-template name="processBootstrapAttrSetReflection">
-        <xsl:with-param name="attrSet" select="concat('__color__', if ($theme = 'warning' or $theme = 'light') then 'dark' else 'white')"/>
+        <xsl:with-param
+          name="attrSet"
+          select="concat('__color__', if ($theme = 'warning' or $theme = 'light') then 'dark' else 'white')"
+        />
       </xsl:call-template>
       
       <!-- 2. Padding -->

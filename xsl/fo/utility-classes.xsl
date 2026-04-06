@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:fo="http://www.w3.org/1999/XSL/Format"
-                xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
-                xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
-                xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
-                exclude-result-prefixes="xs opentopic-func dita-ot"
-                version="2.0">
+<xsl:stylesheet
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  exclude-result-prefixes="xs opentopic-func dita-ot"
+  version="2.0"
+>
 
   <xsl:param name="BOOTSTRAP_ICONS_INCLUDE" select="'yes'"/>
 
   <!-- Reflection Template for Bootstrap Attribute Sets -->
   <xsl:template name="processBootstrapAttrSetReflection">
     <xsl:param name="attrSet"/>
-    <xsl:param name="path" select="'../cfg/fo/attrs/bootstrap-attr.xsl'"/>
+    <xsl:param name="path" select="'../../cfg/fo/attrs/bootstrap-attr.xsl'"/>
 
     <xsl:for-each select="document($path)//xsl:attribute-set[@name = $attrSet]/xsl:attribute">
       <xsl:attribute name="{@name}">
@@ -184,13 +186,15 @@
               <xsl:with-param name="attrSet" select="concat('__bg__', substring-after($token, 'bg-'))"/>
             </xsl:call-template>
           </xsl:when>
-          <xsl:when test="$token = 'border' or $token = 'border-top' or $token = 'border-bottom' or $token = 'border-start' or $token = 'border-end' or 
+          <xsl:when
+            test="$token = 'border' or $token = 'border-top' or $token = 'border-bottom' or $token = 'border-start' or $token = 'border-end' or 
                         starts-with($token, 'border-') or starts-with($token, 'rounded-') or $token = 'rounded' or
                         starts-with($token, 'w-') or starts-with($token, 'p-') or starts-with($token, 'm-') or
                         starts-with($token, 'px-') or starts-with($token, 'py-') or starts-with($token, 'pt-') or starts-with($token, 'pb-') or starts-with($token, 'ps-') or starts-with($token, 'pe-') or
                         starts-with($token, 'mx-') or starts-with($token, 'my-') or starts-with($token, 'mt-') or starts-with($token, 'mb-') or starts-with($token, 'ms-') or starts-with($token, 'me-') or
                         $token = 'h1' or $token = 'h2' or $token = 'h3' or $token = 'h4' or $token = 'h5' or $token = 'h6' or
-                        starts-with($token, 'display-')">
+                        starts-with($token, 'display-')"
+          >
             <xsl:call-template name="processBootstrapAttrSetReflection">
               <xsl:with-param name="attrSet" select="$token"/>
             </xsl:call-template>
@@ -205,7 +209,9 @@
       <!-- Pass 2: Text color -->
       <xsl:for-each select="$tokens">
         <xsl:variable name="token" select="."/>
-        <xsl:if test="starts-with($token, 'text-') and not($token = 'text-start' or $token = 'text-center' or $token = 'text-end')">
+        <xsl:if
+          test="starts-with($token, 'text-') and not($token = 'text-start' or $token = 'text-center' or $token = 'text-end')"
+        >
           <xsl:call-template name="processBootstrapAttrSetReflection">
             <xsl:with-param name="attrSet" select="concat('__color__', substring-after($token, 'text-'))"/>
           </xsl:call-template>
@@ -215,9 +221,11 @@
   </xsl:template>
 
   <!-- Baseline Section and Div Support -->
-  <xsl:template match="*[contains(@class, ' topic/section ') or 
+  <xsl:template
+    match="*[contains(@class, ' topic/section ') or 
                          contains(@class, ' topic/div ') or 
-                         contains(@class, ' topic/bodydiv ')]">
+                         contains(@class, ' topic/bodydiv ')]"
+  >
     <fo:block>
       <xsl:call-template name="commonattributes"/>
       <xsl:if test="@color">
@@ -400,7 +408,9 @@
   </xsl:template>
 
   <!-- Unstyled List Support (ul and ol) -->
-  <xsl:template match="*[contains(@class, ' topic/ul ') or contains(@class, ' topic/ol ')][tokenize(@outputclass, ' ') = 'list-unstyled']" >
+  <xsl:template
+    match="*[contains(@class, ' topic/ul ') or contains(@class, ' topic/ol ')][tokenize(@outputclass, ' ') = 'list-unstyled']"
+  >
     <fo:block margin-bottom="12pt">
       <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="processBootstrapDirection"/>
@@ -416,7 +426,9 @@
   </xsl:template>
 
   <!-- Inline List Support (ul and ol) -->
-  <xsl:template match="*[contains(@class, ' topic/ul ') or contains(@class, ' topic/ol ')][tokenize(@outputclass, ' ') = 'list-inline']">
+  <xsl:template
+    match="*[contains(@class, ' topic/ul ') or contains(@class, ' topic/ol ')][tokenize(@outputclass, ' ') = 'list-inline']"
+  >
     <fo:block margin-bottom="12pt">
       <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="processBootstrapDirection"/>
@@ -432,7 +444,10 @@
   </xsl:template>
 
   <!-- Suppress any elements used for dark/light mode switching in print -->
-  <xsl:template match="*[tokenize(normalize-space(@outputclass), ' ') = 'd-light' or tokenize(normalize-space(@outputclass), ' ') = 'd-dark']" priority="5"/>
+  <xsl:template
+    match="*[tokenize(normalize-space(@outputclass), ' ') = 'd-light' or tokenize(normalize-space(@outputclass), ' ') = 'd-dark']"
+    priority="5"
+  />
 
   <!-- Only render the first image within a picture element -->
   <xsl:template match="*[contains(@class, ' bootstrap-d/picture ')]" priority="6">
@@ -462,8 +477,15 @@
     <xsl:choose>
       <xsl:when test="@placement = 'break'">
         <fo:block margin-top="12pt" margin-bottom="12pt" text-align="center">
-          <fo:external-graphic src="url('{$resolved-href}')" content-width="scale-to-fit" scaling="uniform"
-                              border="1pt solid" padding="5pt" fox:border-radius="4pt" vertical-align="middle">
+          <fo:external-graphic
+            src="url('{$resolved-href}')"
+            content-width="scale-to-fit"
+            scaling="uniform"
+            border="1pt solid"
+            padding="5pt"
+            fox:border-radius="4pt"
+            vertical-align="middle"
+          >
             <xsl:choose>
               <xsl:when test="$theme">
                 <xsl:call-template name="processBootstrapBorderColor">
@@ -485,8 +507,15 @@
         </fo:block>
       </xsl:when>
       <xsl:otherwise>
-        <fo:external-graphic src="url('{$resolved-href}')" content-width="scale-to-fit" scaling="uniform"
-                            border="1pt solid" padding="5pt" fox:border-radius="4pt" vertical-align="middle">
+        <fo:external-graphic
+          src="url('{$resolved-href}')"
+          content-width="scale-to-fit"
+          scaling="uniform"
+          border="1pt solid"
+          padding="5pt"
+          fox:border-radius="4pt"
+          vertical-align="middle"
+        >
           <xsl:choose>
             <xsl:when test="$theme">
               <xsl:call-template name="processBootstrapBorderColor">

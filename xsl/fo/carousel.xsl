@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:fo="http://www.w3.org/1999/XSL/Format"
-                xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
-                xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
-                xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
-                exclude-result-prefixes="xs opentopic-func dita-ot"
-                version="2.0">
+<xsl:stylesheet
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  exclude-result-prefixes="xs opentopic-func dita-ot"
+  version="2.0"
+>
 
   <!-- Matches carousel specialized elements or bodydiv/ol with carousel outputclass -->
-  <xsl:template match="*[contains(@class, ' bootstrap-d/carousel ') or (contains(@class, ' topic/ol ') and tokenize(@outputclass, ' ') = 'carousel')]" priority="5">
+  <xsl:template
+    match="*[contains(@class, ' bootstrap-d/carousel ') or (contains(@class, ' topic/ol ') and tokenize(@outputclass, ' ') = 'carousel')]"
+    priority="5"
+  >
     <fo:block>
       <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="processBootstrapDirection"/>
@@ -23,12 +28,15 @@
       <xsl:variable name="colCount" select="if (@cols) then xs:integer(@cols) else 3"/>
 
       <!-- Identify all item-level content to be flattened into the grid -->
-      <xsl:variable name="items" select="(*[contains(@class, ' bootstrap-d/carousel-item ')] | *[contains(@class, ' topic/li ')]) / (
+      <xsl:variable
+        name="items"
+        select="(*[contains(@class, ' bootstrap-d/carousel-item ')] | *[contains(@class, ' topic/li ')]) / (
           *[contains(@class, ' topic/image ')] | 
           *[contains(@class, ' topic/fig ')] | 
           *[contains(@class, ' bootstrap-d/grid-row ') and not(preceding-sibling::*[contains(@class, ' topic/image ')])]/*[contains(@class, ' bootstrap-d/grid-col ')][* or normalize-space()] | 
           *[not(contains(@class, ' topic/image ') or contains(@class, ' topic/fig ') or contains(@class, ' bootstrap-d/grid-row '))]
-        )"/>
+        )"
+      />
 
       <xsl:if test="count($items) &lt;= ($colCount * 3)">
         <xsl:attribute name="keep-with-next">always</xsl:attribute>
@@ -46,7 +54,10 @@
           <xsl:for-each select="if ($colCount = 1) then $items else $items[position() mod $colCount = 1]">
             <xsl:variable name="group-start-idx" select="position()"/>
             <xsl:variable name="group-count" select="count($items)"/>
-            <xsl:variable name="current-group" select="$items[position() &gt;= ($group-start-idx - 1) * $colCount + 1 and position() &lt;= $group-start-idx * $colCount]"/>
+            <xsl:variable
+              name="current-group"
+              select="$items[position() &gt;= ($group-start-idx - 1) * $colCount + 1 and position() &lt;= $group-start-idx * $colCount]"
+            />
             
             <fo:table-row>
               <xsl:for-each select="$current-group">
@@ -59,7 +70,10 @@
                   </xsl:attribute>
                   
                   <!-- Border color logic: carousel/@color or default grey -->
-                  <xsl:variable name="theme" select="ancestor::*[contains(@class, ' bootstrap-d/carousel ')][1]/@color"/>
+                  <xsl:variable
+                    name="theme"
+                    select="ancestor::*[contains(@class, ' bootstrap-d/carousel ')][1]/@color"
+                  />
                   <xsl:choose>
                     <xsl:when test="$theme">
                        <xsl:call-template name="processBootstrapBorderColor">
@@ -89,11 +103,23 @@
                        We pull the corresponding grid-col content into the same cell below the image.
                     -->
                     <xsl:if test="contains(@class, ' topic/image ')">
-                      <xsl:variable name="img-idx" select="count(preceding-sibling::*[contains(@class, ' topic/image ')]) + 1"/>
+                      <xsl:variable
+                        name="img-idx"
+                        select="count(preceding-sibling::*[contains(@class, ' topic/image ')]) + 1"
+                      />
                       <!-- Look for grid-row in the same parent -->
-                      <xsl:variable name="matching-col" select="parent::*/*[contains(@class, ' bootstrap-d/grid-row ')][1]/*[contains(@class, ' bootstrap-d/grid-col ')][$img-idx]"/>
+                      <xsl:variable
+                        name="matching-col"
+                        select="parent::*/*[contains(@class, ' bootstrap-d/grid-row ')][1]/*[contains(@class, ' bootstrap-d/grid-col ')][$img-idx]"
+                      />
                       <xsl:if test="$matching-col">
-                        <fo:block font-size="9pt" color="#6c757d" text-align="center" font-style="italic" margin-top="4pt">
+                        <fo:block
+                          font-size="9pt"
+                          color="#6c757d"
+                          text-align="center"
+                          font-style="italic"
+                          margin-top="4pt"
+                        >
                           <xsl:apply-templates select="$matching-col/node()"/>
                         </fo:block>
                       </xsl:if>
@@ -116,11 +142,17 @@
   </xsl:template>
 
   <!-- Unwrap cards when inside a carousel to avoid double-nesting/borders -->
-  <xsl:template match="*[contains(@class, ' bootstrap-d/carousel ')]//*[contains(@class, ' bootstrap-d/card ')]" priority="10">
+  <xsl:template
+    match="*[contains(@class, ' bootstrap-d/carousel ')]//*[contains(@class, ' bootstrap-d/card ')]"
+    priority="10"
+  >
      <xsl:apply-templates/>
   </xsl:template>
 
-  <xsl:template match="*[contains(@class, ' topic/image ')][ancestor::*[contains(@class, ' bootstrap-d/carousel ') or tokenize(@outputclass, ' ') = 'carousel']]" priority="20">
+  <xsl:template
+    match="*[contains(@class, ' topic/image ')][ancestor::*[contains(@class, ' bootstrap-d/carousel ') or tokenize(@outputclass, ' ') = 'carousel']]"
+    priority="20"
+  >
     <fo:block text-align="center">
       <xsl:variable name="resolved-href">
         <xsl:choose>
@@ -137,7 +169,13 @@
         </xsl:choose>
       </xsl:variable>
 
-      <fo:external-graphic src="url('{$resolved-href}')" content-width="scale-to-fit" width="100%" height="auto" scaling="uniform">
+      <fo:external-graphic
+        src="url('{$resolved-href}')"
+        content-width="scale-to-fit"
+        width="100%"
+        height="auto"
+        scaling="uniform"
+      >
         <xsl:call-template name="commonattributes"/>
       </fo:external-graphic>
     </fo:block>
