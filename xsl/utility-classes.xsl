@@ -444,45 +444,70 @@
 
   <!-- Thumbnail Support -->
   <xsl:template match="*[contains(@class, ' bootstrap-d/thumbnail ')]" priority="6">
-    <xsl:if test="not(tokenize(@outputclass, ' ') = 'd-light' or tokenize(@outputclass, ' ') = 'd-dark')">
-      <xsl:variable name="content">
-        <xsl:variable name="resolved-href">
+    <xsl:variable name="resolved-href">
+      <xsl:choose>
+        <xsl:when test="@scope = 'external' or opentopic-func:isAbsolute(@href)">
+          <xsl:value-of select="@href"/>
+        </xsl:when>
+        <xsl:when test="exists(key('jobFile', @href, $job))">
+          <xsl:value-of select="key('jobFile', @href, $job)/@src"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="concat($input.dir.url, @href)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="theme" select="@color"/>
+    <xsl:choose>
+      <xsl:when test="@placement = 'break'">
+        <fo:block margin-top="12pt" margin-bottom="12pt" text-align="center">
+          <fo:external-graphic src="url('{$resolved-href}')" content-width="scale-to-fit" scaling="uniform"
+                              border="1pt solid" padding="5pt" fox:border-radius="4pt" vertical-align="middle">
+            <xsl:choose>
+              <xsl:when test="$theme">
+                <xsl:call-template name="processBootstrapBorderColor">
+                  <xsl:with-param name="attrValue" select="$theme"/>
+                </xsl:call-template>
+                <xsl:call-template name="processBootstrapAttrSetReflection">
+                  <xsl:with-param name="attrSet" select="concat('__bg__', $theme, '-subtle')"/>
+                </xsl:call-template>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:attribute name="border-color">#dee2e6</xsl:attribute>
+                <xsl:attribute name="background-color">#ffffff</xsl:attribute>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:call-template name="commonattributes"/>
+            <xsl:if test="@height"><xsl:attribute name="height" select="@height"/></xsl:if>
+            <xsl:if test="@width"><xsl:attribute name="width" select="@width"/></xsl:if>
+          </fo:external-graphic>
+        </fo:block>
+      </xsl:when>
+      <xsl:otherwise>
+        <fo:external-graphic src="url('{$resolved-href}')" content-width="scale-to-fit" scaling="uniform"
+                            border="1pt solid" padding="5pt" fox:border-radius="4pt" vertical-align="middle">
           <xsl:choose>
-            <xsl:when test="@scope = 'external' or opentopic-func:isAbsolute(@href)">
-              <xsl:value-of select="@href"/>
-            </xsl:when>
-            <xsl:when test="exists(key('jobFile', @href, $job))">
-              <xsl:value-of select="key('jobFile', @href, $job)/@src"/>
+            <xsl:when test="$theme">
+              <xsl:call-template name="processBootstrapBorderColor">
+                <xsl:with-param name="attrValue" select="$theme"/>
+              </xsl:call-template>
+              <xsl:call-template name="processBootstrapAttrSetReflection">
+                <xsl:with-param name="attrSet" select="concat('__bg__', $theme, '-subtle')"/>
+              </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="concat($input.dir.url, @href)"/>
+              <xsl:attribute name="border-color">#dee2e6</xsl:attribute>
+              <xsl:attribute name="background-color">#ffffff</xsl:attribute>
             </xsl:otherwise>
           </xsl:choose>
-        </xsl:variable>
-        <fo:external-graphic src="url('{$resolved-href}')" content-width="scale-to-fit" scaling="uniform">
-           <xsl:call-template name="commonattributes"/>
-           <xsl:if test="@height"><xsl:attribute name="height" select="@height"/></xsl:if>
-           <xsl:if test="@width"><xsl:attribute name="width" select="@width"/></xsl:if>
+          <xsl:call-template name="commonattributes"/>
+          <xsl:if test="@height"><xsl:attribute name="height" select="@height"/></xsl:if>
+          <xsl:if test="@width"><xsl:attribute name="width" select="@width"/></xsl:if>
         </fo:external-graphic>
-      </xsl:variable>
-
-      <xsl:choose>
-         <xsl:when test="@placement = 'break'">
-            <fo:block-container width="auto" margin-bottom="12pt" border="1pt solid #dee2e6" padding="4pt" background-color="#ffffff" fox:border-radius="4pt">
-               <fo:block line-height="0">
-                  <xsl:copy-of select="$content"/>
-               </fo:block>
-            </fo:block-container>
-         </xsl:when>
-         <xsl:otherwise>
-            <fo:inline-container vertical-align="middle" border="1pt solid #dee2e6" padding="4pt" background-color="#ffffff" fox:border-radius="4pt">
-               <fo:block line-height="0">
-                  <xsl:copy-of select="$content"/>
-               </fo:block>
-            </fo:inline-container>
-         </xsl:otherwise>
-      </xsl:choose>
-    </xsl:if>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
+
 
 </xsl:stylesheet>
