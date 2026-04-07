@@ -18,13 +18,7 @@
       
       <!-- 1. Background & Text Colors -->
       <xsl:call-template name="processBootstrapAttrSetReflection">
-        <xsl:with-param name="attrSet" select="concat('__bg__', $theme)"/>
-      </xsl:call-template>
-      <xsl:call-template name="processBootstrapAttrSetReflection">
-        <xsl:with-param
-          name="attrSet"
-          select="concat('__color__', if ($theme = 'warning' or $theme = 'light') then 'dark' else 'white')"
-        />
+        <xsl:with-param name="attrSet" select="concat('__badge__', $theme)"/>
       </xsl:call-template>
       
       <!-- 2. Padding -->

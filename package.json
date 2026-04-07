@@ -1,10 +1,10 @@
 {
-  "name": "dita-bootstrap.print",
+  "name": "dita-bootstrap.pdf",
   "description": "DITA Open Toolkit plug-in that adds print output to the DITA Bootstrap plug-in",
-  "homepage": "https://github.com/infotexture/dita-bootstrap.print",
+  "homepage": "https://github.com/infotexture/dita-bootstrap.pdf",
   "repository": {
     "type": "git",
-    "url": "https://github.com/infotexture/dita-bootstrap.print.git"
+    "url": "https://github.com/infotexture/dita-bootstrap.pdf.git"
   },
   "license": "Apache-2.0",
   "scripts": {

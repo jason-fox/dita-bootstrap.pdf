@@ -31,7 +31,9 @@
                <!-- No border on flush -->
             </xsl:when>
             <xsl:otherwise>
-               <xsl:attribute name="border">1pt solid #dee2e6</xsl:attribute>
+               <xsl:attribute name="border">
+                 <xsl:value-of select="concat($bootstrap-border-width, ' solid ', $bootstrap-border-color)"/>
+               </xsl:attribute>
             </xsl:otherwise>
          </xsl:choose>
          
@@ -59,7 +61,10 @@
          </xsl:call-template>
       </xsl:if>
       
-      <fo:table-cell border-bottom="1pt solid #dee2e6">
+      <fo:table-cell>
+        <xsl:attribute name="border-bottom">
+          <xsl:value-of select="concat($bootstrap-border-width, ' solid ', $bootstrap-border-color)"/>
+        </xsl:attribute>
         <!-- Apply text color from item specific class if present -->
         <xsl:if test="$itemTheme">
              <xsl:variable name="colorName" select="substring-after($itemTheme[1], 'list-group-item-')"/>

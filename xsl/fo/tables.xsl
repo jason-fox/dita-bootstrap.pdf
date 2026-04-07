@@ -49,13 +49,6 @@
         <xsl:call-template name="processBootstrapAttrSetReflection">
           <xsl:with-param name="attrSet" select="concat('__bg__', $theme)"/>
         </xsl:call-template>
-        <!-- Ensure high-contrast text color for header -->
-        <xsl:call-template name="processBootstrapAttrSetReflection">
-          <xsl:with-param
-            name="attrSet"
-            select="concat('__color__', if ($theme = 'warning' or $theme = 'light') then 'dark' else 'white')"
-          />
-        </xsl:call-template>
       </xsl:if>
       
       <xsl:apply-templates/>
@@ -79,7 +72,7 @@
         <!-- Row-specific color always wins -->
         <xsl:when test="$rowTheme">
           <xsl:call-template name="processBootstrapAttrSetReflection">
-            <xsl:with-param name="attrSet" select="concat('__bg__', $rowTheme, '-subtle')"/>
+            <xsl:with-param name="attrSet" select="concat('__table__', $rowTheme)"/>
           </xsl:call-template>
         </xsl:when>
         <!-- Table-level color or row-striping -->
@@ -181,16 +174,8 @@
         <!-- Entry-specific color wins -->
         <xsl:when test="@color">
            <xsl:call-template name="processBootstrapAttrSetReflection">
-             <xsl:with-param name="attrSet" select="concat('__bg__', @color, if ($isHeader) then '' else '-subtle')"/>
+             <xsl:with-param name="attrSet" select="concat('__table__', @color)"/>
            </xsl:call-template>
-           <xsl:if test="$isHeader">
-               <xsl:call-template name="processBootstrapAttrSetReflection">
-                 <xsl:with-param
-                name="attrSet"
-                select="concat('__color__', if (@color = 'warning' or @color = 'light') then 'dark' else 'white')"
-              />
-               </xsl:call-template>
-           </xsl:if>
         </xsl:when>
         <!-- Column Striping (applied if cell has no theme color) -->
         <xsl:when test="$isColoredCol">

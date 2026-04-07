@@ -84,7 +84,9 @@
         <xsl:attribute name="end-indent">0pt</xsl:attribute>
         
         <!-- Frame Border: Uses @color theme if present, falls back to light gray -->
-        <xsl:attribute name="border">1pt solid</xsl:attribute>
+        <xsl:attribute name="border">
+          <xsl:value-of select="concat($bootstrap-border-width, ' solid')"/>
+        </xsl:attribute>
         <xsl:variable name="theme" select="@color"/>
         <xsl:choose>
           <xsl:when test="$theme">
@@ -93,7 +95,7 @@
             </xsl:call-template>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:attribute name="border-color">#dee2e6</xsl:attribute>
+            <xsl:attribute name="border-color"><xsl:value-of select="$bootstrap-border-color"/></xsl:attribute>
           </xsl:otherwise>
         </xsl:choose>
         <!-- Ensure the entire card stays on one page -->
@@ -121,7 +123,11 @@
           <!-- 1. Card Header Row -->
           <xsl:if test="$header">
             <fo:table-row>
-              <fo:table-cell padding="8pt 15pt" background-color="#f8f9fa" border-bottom="1pt solid #dee2e6">
+              <fo:table-cell padding="8pt 15pt">
+                 <xsl:attribute name="background-color"><xsl:value-of select="$bootstrap-light"/></xsl:attribute>
+                 <xsl:attribute name="border-bottom">
+                    <xsl:value-of select="concat($bootstrap-border-width, ' solid ', $bootstrap-border-color)"/>
+                 </xsl:attribute>
                  <xsl:call-template name="processBootstrapDirection"/>
                  <fo:block>
                     <xsl:call-template name="processBootstrapDirection"/>
@@ -186,7 +192,11 @@
           <!-- 5. Card Footer Row -->
           <xsl:if test="$footer">
             <fo:table-row>
-              <fo:table-cell padding="8pt 15pt" background-color="#f8f9fa" border-top="1pt solid #dee2e6">
+              <fo:table-cell padding="8pt 15pt">
+                 <xsl:attribute name="background-color"><xsl:value-of select="$bootstrap-light"/></xsl:attribute>
+                 <xsl:attribute name="border-top">
+                    <xsl:value-of select="concat($bootstrap-border-width, ' solid ', $bootstrap-border-color)"/>
+                 </xsl:attribute>
                  <xsl:call-template name="processBootstrapDirection"/>
                  <fo:block>
                     <xsl:call-template name="processBootstrapDirection"/>

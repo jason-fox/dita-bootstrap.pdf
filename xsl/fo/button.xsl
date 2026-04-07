@@ -115,20 +115,14 @@
           </xsl:when>
           <xsl:otherwise>
             <xsl:call-template name="processBootstrapAttrSetReflection">
-              <xsl:with-param name="attrSet" select="concat('__bg__', $theme)"/>
-            </xsl:call-template>
-            <xsl:call-template name="processBootstrapAttrSetReflection">
-              <xsl:with-param
-                name="attrSet"
-                select="concat('__color__', if ($theme = 'warning' or $theme = 'light') then 'dark' else 'white')"
-              />
+              <xsl:with-param name="attrSet" select="concat('__btn__', $theme)"/>
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
         
         <!-- 2. Borders -->
         <xsl:attribute name="border-style">solid</xsl:attribute>
-        <xsl:attribute name="border-width">1pt</xsl:attribute>
+        <xsl:attribute name="border-width"><xsl:value-of select="$bootstrap-border-width"/></xsl:attribute>
         <xsl:call-template name="processBootstrapBorderColor">
           <xsl:with-param name="attrValue" select="$theme"/>
         </xsl:call-template>

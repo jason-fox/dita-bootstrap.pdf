@@ -60,15 +60,15 @@
             />
             </xsl:when>
             <xsl:when test="$theme = 'warning' or $theme = 'light' or $theme = 'white'">
-               <xsl:text>black</xsl:text>
+               <xsl:value-of select="$bootstrap-black"/>
             </xsl:when>
             <xsl:when test="$theme != ''">
-               <xsl:text>white</xsl:text>
+               <xsl:value-of select="$bootstrap-white"/>
             </xsl:when>
             <xsl:otherwise>
-               <xsl:text>black</xsl:text>
+               <xsl:value-of select="$bootstrap-black"/>
             </xsl:otherwise>
-         </xsl:choose>
+          </xsl:choose>
       </xsl:variable>
       
       <!-- Use instream-foreign-object and forcefully inject the target color into the SVG -->

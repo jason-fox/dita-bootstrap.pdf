@@ -11,7 +11,6 @@
 >
 
   <!-- Figure Component Handling -->
-  <!-- Aggressive priority="100" to override any other plugin or base templates. -->
   <xsl:template match="*[contains(@class, ' topic/fig ')]" priority="5">
     <fo:block xsl:use-attribute-sets="fig">
       <xsl:call-template name="commonattributes"/>
@@ -75,10 +74,14 @@
   <xsl:template match="*[contains(@class, ' topic/fig ')]/*[contains(@class, ' topic/title ')]" priority="5">
     <fo:block xsl:use-attribute-sets="fig.title">
       <xsl:call-template name="commonattributes"/>
+      <xsl:call-template name="processBootstrapDirection"/>
+      
       <!-- Standard Bootstrap Figure Caption styling -->
       <xsl:attribute name="font-size">0.9em</xsl:attribute>
-      <xsl:attribute name="color">#6c757d</xsl:attribute>
+      <xsl:attribute name="color"><xsl:value-of select="$bootstrap-secondary"/></xsl:attribute>
       <xsl:attribute name="margin-top">8pt</xsl:attribute>
+      <xsl:attribute name="font-weight">bold</xsl:attribute>
+      <xsl:attribute name="font-style">italic</xsl:attribute>
       
       <!-- Alignment: Default left, custom right via text-end -->
       <xsl:attribute name="text-align">

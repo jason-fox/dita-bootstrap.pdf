@@ -1,7 +1,6 @@
-# DITA Bootstrap Print
+# DITA Bootstrap PDF
 
 A plug-in for [DITA Open Toolkit][1] that adds PDF print output to the [DITA Bootstrap plug-in][2].
-
 
 - [Installing](#installing)
 - [Using](#using)
@@ -15,7 +14,7 @@ Use the `dita` command to add this plug-in and its requirements to your DITA Ope
 
 ```console
 dita install net.infotexture.dita-bootstrap
-dita install https://github.com/infotexture/dita-bootstrap.print/archive/master.zip
+dita install https://github.com/infotexture/dita-bootstrap.pdf/archive/master.zip
 ```
 
 ## Using
@@ -62,27 +61,30 @@ The print plug-in interprets these specialized elements and attributes to genera
 
 Most DITA Bootstrap Specializations, as well as many base DITA elements, support the `color` and `border` attributes to control their appearance:
 
--   **Color Themes**: Use standard Bootstrap themes such as `primary`, `secondary`, `success`, `danger`, `warning`, `info`, `light`, and `dark`.
-    ```xml
-    <section color="primary">
-      <title>Primary Section</title>
-      <p>This section has a primary background color.</p>
-    </section>
+- **Color Themes**: Use standard Bootstrap themes such as `primary`, `secondary`, `success`, `danger`, `warning`, `info`, `light`, and `dark`.
 
-    <alert color="warning">
-      <p>This is a warning alert.</p>
-    </alert>
-    <badge color="success">New</badge>
-    ```
--   **Border Thickness**: Use numeric values from `1` to `5` to control border width.
-    ```xml
-    <ph border="1">Bordered phrase</ph>
+  ```xml
+  <section color="primary">
+    <title>Primary Section</title>
+    <p>This section has a primary background color.</p>
+  </section>
 
-    <card border="3" color="info">
-      <title>Thick Border Card</title>
-      <p>Content...</p>
-    </card>
-    ```
+  <alert color="warning">
+    <p>This is a warning alert.</p>
+  </alert>
+  <badge color="success">New</badge>
+  ```
+
+- **Border Thickness**: Use numeric values from `1` to `5` to control border width.
+
+  ```xml
+  <ph border="1">Bordered phrase</ph>
+
+  <card border="3" color="info">
+    <title>Thick Border Card</title>
+    <p>Content...</p>
+  </card>
+  ```
 
 ### Thumbnails
 
@@ -92,8 +94,8 @@ The `<thumbnail>` element (a specialization of `<image>`) can be used to add a t
 <thumbnail href="image.png" color="primary" placement="break"/>
 ```
 
--   **@color**: Sets the border and background theme (e.g., `primary` uses a solid primary border and a subtle primary background).
--   **@placement**: Use `break` for a centered block-level image or `inline` for flowing text integration.
+- **@color**: Sets the border and background theme (e.g., `primary` uses a solid primary border and a subtle primary background).
+- **@placement**: Use `break` for a centered block-level image or `inline` for flowing text integration.
 
 ## Customizing
 
@@ -102,8 +104,6 @@ The `<thumbnail>` element (a specialization of `<image>`) can be used to add a t
 Many of the common Bootstrap utility classes for borders, background, text, and spacing can be used via the `outputclass` attribute in DITA topics. The print plug-in interprets these classes and applies corresponding XSL-FO styling.
 
 For more information on the available classes, see the [main DITA Bootstrap documentation][2].
-
-
 
 ## License
 

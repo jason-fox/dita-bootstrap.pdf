@@ -43,7 +43,7 @@
       
       <!-- 4. Default Visibility & Rounding -->
       <xsl:attribute name="border-style">solid</xsl:attribute>
-      <xsl:attribute name="border-width">1pt</xsl:attribute>
+      <xsl:attribute name="border-width"><xsl:value-of select="$bootstrap-border-width"/></xsl:attribute>
       <xsl:call-template name="processBootstrapRounded">
         <xsl:with-param name="attrValue" select="'yes'"/>
       </xsl:call-template>

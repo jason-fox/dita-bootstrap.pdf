@@ -27,7 +27,9 @@
       
       <fo:block>
          <xsl:if test="not($is-flush)">
-            <xsl:attribute name="border">1pt solid #dee2e6</xsl:attribute>
+            <xsl:attribute name="border">
+              <xsl:value-of select="concat($bootstrap-border-width, ' solid ', $bootstrap-border-color)"/>
+            </xsl:attribute>
             <xsl:if test="@rounded">
                <xsl:call-template name="processBootstrapRounded">
                   <xsl:with-param name="attrValue" select="@rounded"/>
@@ -44,7 +46,10 @@
   <xsl:template match="*[contains(@class, ' topic/section ')]" mode="accordion">
     <xsl:variable name="parent-color" select="../@color"/>
     
-    <fo:table table-layout="fixed" width="100%" border-bottom="1pt solid #dee2e6">
+    <fo:table table-layout="fixed" width="100%">
+      <xsl:attribute name="border-bottom">
+        <xsl:value-of select="concat($bootstrap-border-width, ' solid ', $bootstrap-border-color)"/>
+      </xsl:attribute>
       <xsl:if test="position() = last()">
          <xsl:attribute name="border-bottom">none</xsl:attribute>
       </xsl:if>

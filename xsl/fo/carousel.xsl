@@ -53,7 +53,6 @@
           <!-- Group items into rows based on colCount -->
           <xsl:for-each select="if ($colCount = 1) then $items else $items[position() mod $colCount = 1]">
             <xsl:variable name="group-start-idx" select="position()"/>
-            <xsl:variable name="group-count" select="count($items)"/>
             <xsl:variable
               name="current-group"
               select="$items[position() &gt;= ($group-start-idx - 1) * $colCount + 1 and position() &lt;= $group-start-idx * $colCount]"
@@ -61,7 +60,11 @@
             
             <fo:table-row>
               <xsl:for-each select="$current-group">
-                <fo:table-cell border="1pt solid" fox:border-radius="4pt">
+                <fo:table-cell>
+                  <xsl:attribute name="border">
+                    <xsl:value-of select="concat($bootstrap-border-width, ' solid ', $bootstrap-border-color)"/>
+                  </xsl:attribute>
+                  <xsl:attribute name="fox:border-radius"><xsl:value-of select="$bootstrap-rounded-2"/></xsl:attribute>
                   <xsl:attribute name="padding">
                     <xsl:choose>
                       <xsl:when test="$colCount = 1">10pt</xsl:when>
@@ -84,18 +87,21 @@
                        </xsl:call-template>
                     </xsl:when>
                     <xsl:otherwise>
-                      <xsl:attribute name="border-color">#dee2e6</xsl:attribute>
+                      <xsl:attribute name="border-color"><xsl:value-of
+                          select="$bootstrap-border-color"
+                        /></xsl:attribute>
                     </xsl:otherwise>
                   </xsl:choose>
 
                   <fo:block start-indent="0pt">
                     <xsl:choose>
-                       <xsl:when test="contains(@class, ' bootstrap-d/grid-col ')">
-                          <xsl:apply-templates select="node()"/>
-                       </xsl:when>
-                       <xsl:otherwise>
-                          <xsl:apply-templates select="."/>
-                       </xsl:otherwise>
+                        <!-- When applying templates to a grid-col that has been flattened, unwrap it -->
+                        <xsl:when test="contains(@class, ' bootstrap-d/grid-col ')">
+                           <xsl:apply-templates select="node()"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                           <xsl:apply-templates select="."/>
+                        </xsl:otherwise>
                     </xsl:choose>
                     
                     <!-- 
@@ -113,13 +119,8 @@
                         select="parent::*/*[contains(@class, ' bootstrap-d/grid-row ')][1]/*[contains(@class, ' bootstrap-d/grid-col ')][$img-idx]"
                       />
                       <xsl:if test="$matching-col">
-                        <fo:block
-                          font-size="9pt"
-                          color="#6c757d"
-                          text-align="center"
-                          font-style="italic"
-                          margin-top="4pt"
-                        >
+                        <fo:block font-size="9pt" text-align="center" font-style="italic" margin-top="4pt">
+                          <xsl:attribute name="color"><xsl:value-of select="$bootstrap-secondary"/></xsl:attribute>
                           <xsl:apply-templates select="$matching-col/node()"/>
                         </fo:block>
                       </xsl:if>
@@ -139,6 +140,14 @@
         </fo:table-body>
       </fo:table>
     </fo:block>
+  </xsl:template>
+
+  <!-- Unwrap grid-cols if we ever hit them via apply-templates within carousel items -->
+  <xsl:template
+    match="*[contains(@class, ' bootstrap-d/carousel ')]//*[contains(@class, ' bootstrap-d/grid-col ')]"
+    priority="10"
+  >
+     <xsl:apply-templates/>
   </xsl:template>
 
   <!-- Unwrap cards when inside a carousel to avoid double-nesting/borders -->

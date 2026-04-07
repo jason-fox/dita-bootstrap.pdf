@@ -11,6 +11,17 @@
 >
 
   <xsl:param name="BOOTSTRAP_ICONS_INCLUDE" select="'yes'"/>
+  
+  <!-- Helper Template to retrieve settings from the $bootstrap-settings map with a fallback -->
+  <xsl:template name="getBootstrapSetting">
+    <xsl:param name="name"/>
+    <xsl:param name="default"/>
+    <xsl:variable name="val" select="$bootstrap-settings/entry[@name = $name]"/>
+    <xsl:choose>
+      <xsl:when test="$val != ''"><xsl:value-of select="$val"/></xsl:when>
+      <xsl:otherwise><xsl:value-of select="$default"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
   <!-- Reflection Template for Bootstrap Attribute Sets -->
   <xsl:template name="processBootstrapAttrSetReflection">
@@ -19,7 +30,21 @@
 
     <xsl:for-each select="document($path)//xsl:attribute-set[@name = $attrSet]/xsl:attribute">
       <xsl:attribute name="{@name}">
-        <xsl:value-of select="."/>
+        <xsl:for-each select="node()">
+          <xsl:choose>
+            <xsl:when test="self::xsl:value-of">
+              <xsl:variable name="select" select="@select"/>
+              <xsl:variable
+                name="varName"
+                select="if (starts-with($select, '$')) then substring-after($select, '$') else $select"
+              />
+              <xsl:value-of select="$bootstrap-settings/entry[@name = $varName]"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="."/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:for-each>
       </xsl:attribute>
     </xsl:for-each>
   </xsl:template>
@@ -85,7 +110,7 @@
           <xsl:with-param name="attrValue" select="$processedValue"/>
         </xsl:call-template>
         <!-- Effectively an additional padded border - using p-3 / 12pt -->
-        <xsl:attribute name="padding">12pt</xsl:attribute>
+        <xsl:attribute name="padding"><xsl:value-of select="$bootstrap-spacing-3"/></xsl:attribute>
       </xsl:if>
     </xsl:if>
   </xsl:template>
@@ -95,7 +120,7 @@
     <xsl:param name="attrValue"/>
     <xsl:if test="$attrValue">
       <xsl:attribute name="border-style">solid</xsl:attribute>
-      <xsl:attribute name="border-width">1pt</xsl:attribute>
+      <xsl:attribute name="border-width"><xsl:value-of select="$bootstrap-border-width"/></xsl:attribute>
       <xsl:call-template name="processBootstrapAttrSetReflection">
         <xsl:with-param name="attrSet" select="concat('border-', $attrValue)"/>
       </xsl:call-template>
@@ -476,16 +501,18 @@
     <xsl:variable name="theme" select="@color"/>
     <xsl:choose>
       <xsl:when test="@placement = 'break'">
-        <fo:block margin-top="12pt" margin-bottom="12pt" text-align="center">
+        <fo:block margin-top="{$bootstrap-spacing-3}" margin-bottom="{$bootstrap-spacing-3}" text-align="center">
           <fo:external-graphic
             src="url('{$resolved-href}')"
             content-width="scale-to-fit"
             scaling="uniform"
-            border="1pt solid"
-            padding="5pt"
-            fox:border-radius="4pt"
+            padding="{$bootstrap-spacing-1}"
+            fox:border-radius="{$bootstrap-rounded-2}"
             vertical-align="middle"
           >
+            <xsl:attribute name="border">
+              <xsl:value-of select="concat($bootstrap-border-width, ' solid')"/>
+            </xsl:attribute>
             <xsl:choose>
               <xsl:when test="$theme">
                 <xsl:call-template name="processBootstrapBorderColor">
@@ -496,8 +523,8 @@
                 </xsl:call-template>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:attribute name="border-color">#dee2e6</xsl:attribute>
-                <xsl:attribute name="background-color">#ffffff</xsl:attribute>
+                <xsl:attribute name="border-color"><xsl:value-of select="$bootstrap-border-color"/></xsl:attribute>
+                <xsl:attribute name="background-color"><xsl:value-of select="$bootstrap-white"/></xsl:attribute>
               </xsl:otherwise>
             </xsl:choose>
             <xsl:call-template name="commonattributes"/>
@@ -511,11 +538,13 @@
           src="url('{$resolved-href}')"
           content-width="scale-to-fit"
           scaling="uniform"
-          border="1pt solid"
-          padding="5pt"
-          fox:border-radius="4pt"
+          padding="{$bootstrap-spacing-1}"
+          fox:border-radius="{$bootstrap-rounded-2}"
           vertical-align="middle"
         >
+          <xsl:attribute name="border">
+            <xsl:value-of select="concat($bootstrap-border-width, ' solid')"/>
+          </xsl:attribute>
           <xsl:choose>
             <xsl:when test="$theme">
               <xsl:call-template name="processBootstrapBorderColor">
@@ -526,8 +555,8 @@
               </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:attribute name="border-color">#dee2e6</xsl:attribute>
-              <xsl:attribute name="background-color">#ffffff</xsl:attribute>
+              <xsl:attribute name="border-color"><xsl:value-of select="$bootstrap-border-color"/></xsl:attribute>
+              <xsl:attribute name="background-color"><xsl:value-of select="$bootstrap-white"/></xsl:attribute>
             </xsl:otherwise>
           </xsl:choose>
           <xsl:call-template name="commonattributes"/>
