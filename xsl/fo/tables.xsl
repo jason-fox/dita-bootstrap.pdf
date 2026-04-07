@@ -47,7 +47,7 @@
       <xsl:if test="$theme">
         <!-- Header takes the main theme color (solid background) -->
         <xsl:call-template name="processBootstrapAttrSetReflection">
-          <xsl:with-param name="attrSet" select="concat('__bg__', $theme)"/>
+          <xsl:with-param name="attrSet" select="concat('__table__', $theme)"/>
         </xsl:call-template>
       </xsl:if>
       

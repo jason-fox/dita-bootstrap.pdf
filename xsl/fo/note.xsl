@@ -16,17 +16,9 @@
         <xsl:choose>
           <xsl:when test="@color"><xsl:value-of select="@color"/></xsl:when>
           <xsl:otherwise>
-            <xsl:variable name="type" select="(@type, 'note')[1]"/>
-            <xsl:choose>
-              <xsl:when test="$type = 'note' or $type = 'notice' or $type = 'remember'">info</xsl:when>
-              <xsl:when test="$type = 'tip' or $type = 'fastpath'">success</xsl:when>
-              <xsl:when test="$type = 'important'">primary</xsl:when>
-              <xsl:when
-                test="$type = 'warning' or $type = 'caution' or $type = 'restriction' or $type = 'trouble'"
-              >warning</xsl:when>
-              <xsl:when test="$type = 'danger'">danger</xsl:when>
-              <xsl:otherwise>secondary</xsl:otherwise>
-            </xsl:choose>
+            <xsl:call-template name="getNoteTheme">
+              <xsl:with-param name="type" select="(@type, 'note')[1]"/>
+            </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
@@ -72,10 +64,9 @@
 
       <!-- Determine text color for the icon from the theme-subtle attribute set -->
       <xsl:variable name="icon-color">
-         <xsl:variable name="attrSet" select="concat('__bg__', $theme, '-subtle')"/>
-         <xsl:value-of
-          select="document('../../cfg/fo/attrs/bootstrap-attr.xsl')//xsl:attribute-set[@name = $attrSet]/xsl:attribute[@name = 'color']"
-        />
+        <xsl:call-template name="getBootstrapAttrValue">
+          <xsl:with-param name="attrSet" select="concat('__bg__', $theme, '-subtle')"/>
+        </xsl:call-template>
       </xsl:variable>
 
       <!-- Note Title / Icon Prefix -->

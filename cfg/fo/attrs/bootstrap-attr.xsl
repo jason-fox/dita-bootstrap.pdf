@@ -33,13 +33,6 @@
   <xsl:attribute-set name="__color__dark">
     <xsl:attribute name="color"><xsl:value-of select="$bootstrap-dark"/></xsl:attribute>
   </xsl:attribute-set>
-  <xsl:attribute-set name="__color__black">
-    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-black"/></xsl:attribute>
-  </xsl:attribute-set>
-  <xsl:attribute-set name="__color__white">
-    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-white"/></xsl:attribute>
-  </xsl:attribute-set>
-
   <xsl:attribute-set name="common.link">
     <xsl:attribute name="color"><xsl:value-of select="$bootstrap-link"/></xsl:attribute>
   </xsl:attribute-set>
@@ -47,19 +40,19 @@
   <!-- Standard Bootstrap Background Colors -->
   <xsl:attribute-set name="__bg__primary">
     <xsl:attribute name="background-color"><xsl:value-of select="$bootstrap-primary"/></xsl:attribute>
-    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-white"/></xsl:attribute>
+    <xsl:attribute name="color">#ffffff</xsl:attribute>
   </xsl:attribute-set>
   <xsl:attribute-set name="__bg__secondary">
     <xsl:attribute name="background-color"><xsl:value-of select="$bootstrap-secondary"/></xsl:attribute>
-    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-white"/></xsl:attribute>
+    <xsl:attribute name="color">#ffffff</xsl:attribute>
   </xsl:attribute-set>
   <xsl:attribute-set name="__bg__success">
     <xsl:attribute name="background-color"><xsl:value-of select="$bootstrap-success"/></xsl:attribute>
-    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-white"/></xsl:attribute>
+    <xsl:attribute name="color">#ffffff</xsl:attribute>
   </xsl:attribute-set>
   <xsl:attribute-set name="__bg__danger">
     <xsl:attribute name="background-color"><xsl:value-of select="$bootstrap-danger"/></xsl:attribute>
-    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-white"/></xsl:attribute>
+    <xsl:attribute name="color">#ffffff</xsl:attribute>
   </xsl:attribute-set>
   <xsl:attribute-set name="__bg__warning">
     <xsl:attribute name="background-color"><xsl:value-of select="$bootstrap-warning"/></xsl:attribute>
@@ -75,17 +68,8 @@
   </xsl:attribute-set>
   <xsl:attribute-set name="__bg__dark">
     <xsl:attribute name="background-color"><xsl:value-of select="$bootstrap-dark"/></xsl:attribute>
-    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-white"/></xsl:attribute>
+    <xsl:attribute name="color">#ffffff</xsl:attribute>
   </xsl:attribute-set>
-  <xsl:attribute-set name="__bg__black">
-    <xsl:attribute name="background-color"><xsl:value-of select="$bootstrap-black"/></xsl:attribute>
-    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-white"/></xsl:attribute>
-  </xsl:attribute-set>
-  <xsl:attribute-set name="__bg__white">
-    <xsl:attribute name="background-color"><xsl:value-of select="$bootstrap-white"/></xsl:attribute>
-    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-dark"/></xsl:attribute>
-  </xsl:attribute-set>
-
   <!-- Subtle Background Colors (for Alerts, Callouts, etc.) -->
   <xsl:attribute-set name="__bg__primary-subtle">
     <xsl:attribute name="background-color"><xsl:value-of select="$bootstrap-primary-subtle"/></xsl:attribute>
@@ -627,13 +611,6 @@
   <xsl:attribute-set name="border-dark"><xsl:attribute name="border-color"><xsl:value-of
         select="$bootstrap-dark"
       /></xsl:attribute></xsl:attribute-set>
-  <xsl:attribute-set name="border-black"><xsl:attribute name="border-color"><xsl:value-of
-        select="$bootstrap-black"
-      /></xsl:attribute></xsl:attribute-set>
-  <xsl:attribute-set name="border-white"><xsl:attribute name="border-color"><xsl:value-of
-        select="$bootstrap-white"
-      /></xsl:attribute></xsl:attribute-set>
-
   <!-- Border Thickness -->
   <xsl:attribute-set name="border-1"><xsl:attribute name="border-width">1pt</xsl:attribute></xsl:attribute-set>
   <xsl:attribute-set name="border-2"><xsl:attribute name="border-width">2pt</xsl:attribute></xsl:attribute-set>

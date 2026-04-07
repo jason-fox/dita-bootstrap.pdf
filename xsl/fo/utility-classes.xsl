@@ -23,6 +23,37 @@
     </xsl:choose>
   </xsl:template>
 
+  <!-- Map DITA Note Type to Bootstrap Theme -->
+  <xsl:template name="getNoteTheme">
+    <xsl:param name="type" select="'note'"/>
+    <xsl:choose>
+      <xsl:when test="$type = 'note' or $type = 'notice' or $type = 'remember'">info</xsl:when>
+      <xsl:when test="$type = 'tip' or $type = 'fastpath'">success</xsl:when>
+      <xsl:when test="$type = 'important'">primary</xsl:when>
+      <xsl:when test="$type = 'warning' or $type = 'caution' or $type = 'restriction' or $type = 'trouble'">warning</xsl:when>
+      <xsl:when test="$type = 'danger'">danger</xsl:when>
+      <xsl:otherwise>secondary</xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- Retrieve the computed value of a specific attribute from an attribute-set -->
+  <xsl:template name="getBootstrapAttrValue">
+    <xsl:param name="attrSet"/>
+    <xsl:param name="attrName" select="'color'"/>
+    <xsl:param name="path" select="'../../cfg/fo/attrs/bootstrap-attr.xsl'"/>
+    <xsl:variable name="attr" select="document($path)//xsl:attribute-set[@name = $attrSet]/xsl:attribute[@name = $attrName]"/>
+    <xsl:choose>
+      <xsl:when test="$attr/xsl:value-of">
+        <xsl:variable name="select" select="$attr/xsl:value-of/@select"/>
+        <xsl:variable name="varName" select="if (starts-with($select, '$')) then substring-after($select, '$') else $select"/>
+        <xsl:value-of select="$bootstrap-settings/entry[@name = $varName]"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$attr"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
   <!-- Reflection Template for Bootstrap Attribute Sets -->
   <xsl:template name="processBootstrapAttrSetReflection">
     <xsl:param name="attrSet"/>
@@ -524,7 +555,7 @@
               </xsl:when>
               <xsl:otherwise>
                 <xsl:attribute name="border-color"><xsl:value-of select="$bootstrap-border-color"/></xsl:attribute>
-                <xsl:attribute name="background-color"><xsl:value-of select="$bootstrap-white"/></xsl:attribute>
+                <xsl:attribute name="background-color">#ffffff</xsl:attribute>
               </xsl:otherwise>
             </xsl:choose>
             <xsl:call-template name="commonattributes"/>
@@ -556,7 +587,7 @@
             </xsl:when>
             <xsl:otherwise>
               <xsl:attribute name="border-color"><xsl:value-of select="$bootstrap-border-color"/></xsl:attribute>
-              <xsl:attribute name="background-color"><xsl:value-of select="$bootstrap-white"/></xsl:attribute>
+              <xsl:attribute name="background-color">#ffffff</xsl:attribute>
             </xsl:otherwise>
           </xsl:choose>
           <xsl:call-template name="commonattributes"/>

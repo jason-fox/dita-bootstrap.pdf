@@ -15,8 +15,6 @@
     <entry name="bootstrap-info">#0dcaf0</entry>
     <entry name="bootstrap-light">#f8f9fa</entry>
     <entry name="bootstrap-dark">#212529</entry>
-    <entry name="bootstrap-black">#000000</entry>
-    <entry name="bootstrap-white">#ffffff</entry>
     <entry name="bootstrap-link">#0d6efd</entry>
 
     <entry name="bootstrap-primary-subtle">#e0f2ff</entry>
@@ -150,8 +148,6 @@
   <xsl:variable name="bootstrap-info" select="$bootstrap-settings/entry[@name='bootstrap-info']"/>
   <xsl:variable name="bootstrap-light" select="$bootstrap-settings/entry[@name='bootstrap-light']"/>
   <xsl:variable name="bootstrap-dark" select="$bootstrap-settings/entry[@name='bootstrap-dark']"/>
-  <xsl:variable name="bootstrap-black" select="$bootstrap-settings/entry[@name='bootstrap-black']"/>
-  <xsl:variable name="bootstrap-white" select="$bootstrap-settings/entry[@name='bootstrap-white']"/>
   <xsl:variable name="bootstrap-link" select="$bootstrap-settings/entry[@name='bootstrap-link']"/>
 
   <xsl:variable name="bootstrap-primary-subtle" select="$bootstrap-settings/entry[@name='bootstrap-primary-subtle']"/>
