@@ -150,8 +150,11 @@
   <xsl:template name="processBootstrapBorderColor">
     <xsl:param name="attrValue"/>
     <xsl:if test="$attrValue">
-      <xsl:attribute name="border-style">solid</xsl:attribute>
-      <xsl:attribute name="border-width"><xsl:value-of select="$bootstrap-border-width"/></xsl:attribute>
+      <xsl:variable name="isZeroWidth" select="normalize-space($bootstrap-border-width) = ('0', '0pt', '0px', '0in', '0mm', '0cm', '0.0pt', '0.0px')"/>
+      <xsl:if test="not($isZeroWidth)">
+        <xsl:attribute name="border-style">solid</xsl:attribute>
+        <xsl:attribute name="border-width"><xsl:value-of select="$bootstrap-border-width"/></xsl:attribute>
+      </xsl:if>
       <xsl:call-template name="processBootstrapAttrSetReflection">
         <xsl:with-param name="attrSet" select="concat('border-', $attrValue)"/>
       </xsl:call-template>
@@ -192,19 +195,28 @@
     </xsl:choose>
   </xsl:template>
 
-  <!-- Process @rounded attribute -->
   <xsl:template name="processBootstrapRounded">
     <xsl:param name="attrValue"/>
     <xsl:if test="$attrValue">
-      <xsl:variable name="attrSetName">
-        <xsl:choose>
-          <xsl:when test="$attrValue = 'yes' or $attrValue = 'true'">rounded</xsl:when>
-          <xsl:otherwise><xsl:value-of select="concat('rounded-', $attrValue)"/></xsl:otherwise>
-        </xsl:choose>
+      <xsl:variable name="level" select="if ($attrValue = ('yes', 'true')) then '' else concat('-', $attrValue)"/>
+      <xsl:variable name="varName" select="concat('bootstrap-rounded', $level)"/>
+      <xsl:variable name="val">
+        <xsl:call-template name="getBootstrapSetting">
+          <xsl:with-param name="name" select="$varName"/>
+        </xsl:call-template>
       </xsl:variable>
-      <xsl:call-template name="processBootstrapAttrSetReflection">
-        <xsl:with-param name="attrSet" select="$attrSetName"/>
-      </xsl:call-template>
+
+      <xsl:if test="not(normalize-space($val) = ('0', '0pt', '0px', '0in', '0mm', '0cm', '0.0pt', '0.0px'))">
+        <xsl:variable name="attrSetName">
+          <xsl:choose>
+            <xsl:when test="$attrValue = 'yes' or $attrValue = 'true'">rounded</xsl:when>
+            <xsl:otherwise><xsl:value-of select="concat('rounded-', $attrValue)"/></xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:call-template name="processBootstrapAttrSetReflection">
+          <xsl:with-param name="attrSet" select="$attrSetName"/>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:if>
   </xsl:template>
 
@@ -546,9 +558,11 @@
             content-width="scale-to-fit"
             scaling="uniform"
             padding="{$bootstrap-spacing-1}"
-            fox:border-radius="{$bootstrap-rounded-2}"
             vertical-align="middle"
           >
+            <xsl:call-template name="processBootstrapRounded">
+              <xsl:with-param name="attrValue" select="(@rounded, '2')[1]"/>
+            </xsl:call-template>
             <xsl:attribute name="border">
               <xsl:value-of select="concat($bootstrap-border-width, ' solid')"/>
             </xsl:attribute>
@@ -578,9 +592,11 @@
           content-width="scale-to-fit"
           scaling="uniform"
           padding="{$bootstrap-spacing-1}"
-          fox:border-radius="{$bootstrap-rounded-2}"
           vertical-align="middle"
         >
+          <xsl:call-template name="processBootstrapRounded">
+            <xsl:with-param name="attrValue" select="(@rounded, '2')[1]"/>
+          </xsl:call-template>
           <xsl:attribute name="border">
             <xsl:value-of select="concat($bootstrap-border-width, ' solid')"/>
           </xsl:attribute>
@@ -606,5 +622,18 @@
     </xsl:choose>
   </xsl:template>
 
+  <xsl:template match="*" mode="prismDecoration">
+      <xsl:call-template name="processBootstrapAttrSetReflection">
+          <xsl:with-param name="attrSet" select="'__bg__secondary-subtle'"/>
+      </xsl:call-template>
+      <xsl:call-template name="processBootstrapBorderColor">
+          <xsl:with-param name="attrValue" select="'secondary'"/>
+      </xsl:call-template>
+      <!-- Use global variables for consistent theme scaling and rounding awareness -->
+      <xsl:call-template name="processBootstrapRounded">
+        <xsl:with-param name="attrValue" select="(@rounded, 'yes')[1]"/>
+      </xsl:call-template>
+      <xsl:attribute name="padding"><xsl:value-of select="$bootstrap-spacing-1"/></xsl:attribute>
+  </xsl:template>
 
 </xsl:stylesheet>

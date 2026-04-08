@@ -561,29 +561,29 @@
 
   <!-- Standard Bootstrap Borders -->
   <xsl:attribute-set name="border">
-    <xsl:attribute name="border"><xsl:value-of select="$bootstrap-border-width"/> solid <xsl:value-of
-        select="$bootstrap-border-color"
-      /></xsl:attribute>
+    <xsl:attribute name="border">
+      <xsl:value-of select="$bootstrap-border-width"/> solid <xsl:value-of select="$bootstrap-border-color"/>
+    </xsl:attribute>
   </xsl:attribute-set>
   <xsl:attribute-set name="border-top">
-    <xsl:attribute name="border-top"><xsl:value-of select="$bootstrap-border-width"/> solid <xsl:value-of
-        select="$bootstrap-border-color"
-      /></xsl:attribute>
+    <xsl:attribute name="border-top">
+      <xsl:value-of select="$bootstrap-border-width"/> solid <xsl:value-of select="$bootstrap-border-color"/>
+    </xsl:attribute>
   </xsl:attribute-set>
   <xsl:attribute-set name="border-bottom">
-    <xsl:attribute name="border-bottom"><xsl:value-of select="$bootstrap-border-width"/> solid <xsl:value-of
-        select="$bootstrap-border-color"
-      /></xsl:attribute>
+    <xsl:attribute name="border-bottom">
+      <xsl:value-of select="$bootstrap-border-width"/> solid <xsl:value-of select="$bootstrap-border-color"/>
+    </xsl:attribute>
   </xsl:attribute-set>
   <xsl:attribute-set name="border-start">
-    <xsl:attribute name="border-left"><xsl:value-of select="$bootstrap-border-width"/> solid <xsl:value-of
-        select="$bootstrap-border-color"
-      /></xsl:attribute>
+    <xsl:attribute name="border-left">
+      <xsl:value-of select="$bootstrap-border-width"/> solid <xsl:value-of select="$bootstrap-border-color"/>
+    </xsl:attribute>
   </xsl:attribute-set>
   <xsl:attribute-set name="border-end">
-    <xsl:attribute name="border-right"><xsl:value-of select="$bootstrap-border-width"/> solid <xsl:value-of
-        select="$bootstrap-border-color"
-      /></xsl:attribute>
+    <xsl:attribute name="border-right">
+      <xsl:value-of select="$bootstrap-border-width"/> solid <xsl:value-of select="$bootstrap-border-color"/>
+    </xsl:attribute>
   </xsl:attribute-set>
 
   <!-- Border Colors -->
@@ -645,9 +645,11 @@
 
   <!-- Rounded Corners (Approximate Bootstrap values) -->
   <!-- Rounded Corners (Apache FOP extensions) -->
-  <xsl:attribute-set name="rounded"><xsl:attribute name="fox:border-radius"><xsl:value-of
-        select="$bootstrap-rounded"
-      /></xsl:attribute></xsl:attribute-set>
+  <xsl:attribute-set name="rounded">
+    <xsl:attribute name="fox:border-radius">
+      <xsl:value-of select="$bootstrap-rounded"/>
+    </xsl:attribute>
+  </xsl:attribute-set>
   <xsl:attribute-set name="rounded-0"><xsl:attribute name="fox:border-radius"><xsl:value-of
         select="$bootstrap-rounded-0"
       /></xsl:attribute></xsl:attribute-set>
