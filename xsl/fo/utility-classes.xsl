@@ -629,11 +629,22 @@
       <xsl:call-template name="processBootstrapBorderColor">
           <xsl:with-param name="attrValue" select="'secondary'"/>
       </xsl:call-template>
+      <xsl:attribute name="border-style">solid</xsl:attribute>
+      <xsl:attribute name="border-width"><xsl:value-of select="$bootstrap-border-width"/></xsl:attribute>
       <!-- Use global variables for consistent theme scaling and rounding awareness -->
       <xsl:call-template name="processBootstrapRounded">
         <xsl:with-param name="attrValue" select="(@rounded, 'yes')[1]"/>
       </xsl:call-template>
       <xsl:attribute name="padding"><xsl:value-of select="$bootstrap-spacing-1"/></xsl:attribute>
+      <xsl:call-template name="bootstrap.decoration"/>
+  </xsl:template>
+  
+  <xsl:template name="bootstrap.decoration">
+      <xsl:apply-templates select="." mode="bootstrapDecoration"/>
+  </xsl:template>
+
+  <xsl:template match="*" mode="bootstrapDecoration">
+      <!-- Default: No decoration -->
   </xsl:template>
 
 </xsl:stylesheet>

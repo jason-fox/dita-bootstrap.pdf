@@ -101,7 +101,7 @@
 
       <xsl:element name="{$element}">
         <xsl:call-template name="commonattributes"/>
-
+        
         <!-- Specialized Bootstrap Styling -->
         <xsl:variable name="theme" select="(@color, 'primary')[1]"/>
         <xsl:variable name="size" select="(@size, 'default')[1]"/>
@@ -237,6 +237,8 @@
         <xsl:call-template name="processBootstrapOutputClass">
           <xsl:with-param name="attrValue" select="@outputclass"/>
         </xsl:call-template>
+
+        <xsl:call-template name="bootstrap.decoration"/>
 
         <!-- 5. Content handling - ensure we only process the intended label -->
         <fo:inline>

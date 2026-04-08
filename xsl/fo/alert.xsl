@@ -78,6 +78,7 @@
         <xsl:attribute name="margin-bottom">10pt</xsl:attribute>
       </xsl:if>
 
+      <xsl:call-template name="bootstrap.decoration"/>
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>

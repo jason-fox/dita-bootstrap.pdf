@@ -100,6 +100,7 @@
         </xsl:choose>
         <!-- Ensure the entire card stays on one page -->
         <xsl:attribute name="keep-together.within-page">always</xsl:attribute>
+        <xsl:call-template name="bootstrap.decoration"/>
 
         <fo:table-column column-width="proportional-column-width(1)"/>
         <fo:table-body>

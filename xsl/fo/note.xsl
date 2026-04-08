@@ -66,6 +66,8 @@
 
       <xsl:call-template name="processBootstrapDirection"/>
 
+      <xsl:call-template name="bootstrap.decoration"/>
+
       <!-- Determine text color for the icon from the theme-subtle attribute set -->
       <xsl:variable name="icon-color">
         <xsl:call-template name="getBootstrapAttrValue">
