@@ -36,7 +36,7 @@
   <xsl:attribute-set name="common.link">
     <xsl:attribute name="color">
       <xsl:choose>
-        <xsl:when test="@color">
+        <xsl:when test="@color and local-name() = 'xref'">
           <xsl:variable name="explicitVar" select="concat('bootstrap-', @color)"/>
           <xsl:choose>
             <xsl:when test="$bootstrap-settings/entry[@name = $explicitVar]">
@@ -79,7 +79,7 @@
     </xsl:attribute>
     <xsl:attribute name="text-decoration">
       <xsl:choose>
-        <xsl:when test="@color">underline</xsl:when>
+        <xsl:when test="@color and local-name() = 'xref'">underline</xsl:when>
         <xsl:otherwise>
           <xsl:variable name="theme">
             <xsl:choose>
