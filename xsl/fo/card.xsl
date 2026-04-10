@@ -69,6 +69,7 @@
                          <xsl:with-param name="inner" select="$card-content"/>
                          <xsl:with-param name="shadow-val" select="@shadow"/>
                          <xsl:with-param name="margin-val" select="''"/>
+                         <xsl:with-param name="reset-indent" select="true()"/>
                       </xsl:call-template>
                    </xsl:when>
                    <xsl:otherwise>

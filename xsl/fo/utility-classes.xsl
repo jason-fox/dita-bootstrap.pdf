@@ -696,6 +696,9 @@
     <xsl:param name="inner"/>
     <xsl:param name="shadow-val" select="@shadow"/>
     <xsl:param name="margin-val" select="@margin"/>
+    <!-- reset-indent: set to true() only when called from inside a table-cell context (e.g. cards)
+         to anchor the wrapper at x=0 and prevent inherited body start-indent from causing a shift. -->
+    <xsl:param name="reset-indent" select="false()"/>
 
     <xsl:choose>
       <xsl:when test="$inner/*[1][self::fo:inline or self::fo:basic-link]">
@@ -712,13 +715,28 @@
           </xsl:choose>
         </xsl:variable>
 
+        <!-- Bottom offset is half of right offset for a natural drop-shadow angle -->
+        <xsl:variable name="shadow-offset-bottom">
+          <xsl:choose>
+            <xsl:when test="$shadow-val = 'sm'">1.5pt</xsl:when>
+            <xsl:when test="$shadow-val = 'lg'">6pt</xsl:when>
+            <xsl:otherwise>3pt</xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+
         <!-- Read the actual border-radius computed by the inner element's own template.
              This covers @rounded on the element itself, defaults applied by alert/note
              templates, and flat themes that set border-radius to 0. -->
         <xsl:variable name="inner-border-radius" select="$inner/*[1]/@fox:border-radius"/>
 
-        <!-- Outer Boundary Restraint: perfectly inherits required structural dimensions and layout-padding -->
+        <!-- Outer Boundary Restraint: perfectly inherits required structural dimensions and layout-padding.
+             start-indent/end-indent reset to 0pt only when reset-indent=true() (e.g. card context inside
+             a table-cell) to prevent inherited body indent from shifting shadow layers. -->
         <fo:block>
+          <xsl:if test="$reset-indent">
+            <xsl:attribute name="start-indent">0pt</xsl:attribute>
+            <xsl:attribute name="end-indent">0pt</xsl:attribute>
+          </xsl:if>
           <xsl:if test="$inner/*[1]/@width">
             <xsl:attribute name="width"><xsl:value-of select="$inner/*[1]/@width"/></xsl:attribute>
           </xsl:if>
@@ -731,16 +749,79 @@
             <xsl:with-param name="prefix" select="'m'"/>
           </xsl:call-template>
 
-          <!-- Expansion Sub-Wrapper: Expands outwards by the shadow-offset via negative structural margins -->
-          <fo:block margin-right="-{$shadow-offset}" margin-bottom="-{$shadow-offset}">
-              <!-- Render Shadow Wrapper: Offsets the internal content using dedicated padding values.
-                   Copies the inner element's exact fox:border-radius so corners align perfectly. -->
-              <fo:block background-color="#d8d8d8" padding-bottom="{$shadow-offset}" padding-right="{$shadow-offset}">
-                <xsl:if test="$inner-border-radius">
-                  <xsl:attribute name="fox:border-radius"><xsl:value-of select="$inner-border-radius"/></xsl:attribute>
-                </xsl:if>
-                <xsl:apply-templates select="$inner/node()" mode="strip-margin"/>
-              </fo:block>
+          <!-- Expansion Sub-Wrapper: Expands outwards by the shadow-offset via negative structural margins.
+               Bottom is halved relative to right for a more natural drop-shadow perspective. -->
+          <fo:block margin-right="-{$shadow-offset}" margin-bottom="-{$shadow-offset-bottom}">
+            <!-- Diffuse Shadow: layered nested blocks, light at the edge → dark near content.
+                 sm (3pt right / 1.5pt bottom):  2 layers
+                 md (6pt right / 3pt bottom):    6 layers, 1pt right steps
+                 lg (12pt right / 6pt bottom):   8 layers, finer steps -->
+            <xsl:choose>
+
+              <!-- sm: 2 diffuse layers -->
+              <xsl:when test="$shadow-val = 'sm'">
+                <fo:block background-color="#eeeeee" padding-bottom="1.5pt" padding-right="3pt">
+                  <xsl:if test="$inner-border-radius"><xsl:attribute name="fox:border-radius"><xsl:value-of select="$inner-border-radius"/></xsl:attribute></xsl:if>
+                  <fo:block background-color="#d4d4d4" padding-bottom="0.5pt" padding-right="1pt">
+                    <xsl:if test="$inner-border-radius"><xsl:attribute name="fox:border-radius"><xsl:value-of select="$inner-border-radius"/></xsl:attribute></xsl:if>
+                    <xsl:apply-templates select="$inner/node()" mode="strip-margin"/>
+                  </fo:block>
+                </fo:block>
+              </xsl:when>
+
+              <!-- lg: 8 diffuse layers (12pt right / 6pt bottom) -->
+              <xsl:when test="$shadow-val = 'lg'">
+                <fo:block background-color="#f6f6f6" padding-bottom="6pt" padding-right="12pt">
+                  <xsl:if test="$inner-border-radius"><xsl:attribute name="fox:border-radius"><xsl:value-of select="$inner-border-radius"/></xsl:attribute></xsl:if>
+                  <fo:block background-color="#f2f2f2" padding-bottom="5pt" padding-right="10pt">
+                    <xsl:if test="$inner-border-radius"><xsl:attribute name="fox:border-radius"><xsl:value-of select="$inner-border-radius"/></xsl:attribute></xsl:if>
+                    <fo:block background-color="#eeeeee" padding-bottom="4pt" padding-right="8pt">
+                      <xsl:if test="$inner-border-radius"><xsl:attribute name="fox:border-radius"><xsl:value-of select="$inner-border-radius"/></xsl:attribute></xsl:if>
+                      <fo:block background-color="#e8e8e8" padding-bottom="3pt" padding-right="6pt">
+                        <xsl:if test="$inner-border-radius"><xsl:attribute name="fox:border-radius"><xsl:value-of select="$inner-border-radius"/></xsl:attribute></xsl:if>
+                        <fo:block background-color="#e0e0e0" padding-bottom="2pt" padding-right="4pt">
+                          <xsl:if test="$inner-border-radius"><xsl:attribute name="fox:border-radius"><xsl:value-of select="$inner-border-radius"/></xsl:attribute></xsl:if>
+                          <fo:block background-color="#dcdcdc" padding-bottom="1.5pt" padding-right="3pt">
+                            <xsl:if test="$inner-border-radius"><xsl:attribute name="fox:border-radius"><xsl:value-of select="$inner-border-radius"/></xsl:attribute></xsl:if>
+                            <fo:block background-color="#d8d8d8" padding-bottom="1pt" padding-right="2pt">
+                              <xsl:if test="$inner-border-radius"><xsl:attribute name="fox:border-radius"><xsl:value-of select="$inner-border-radius"/></xsl:attribute></xsl:if>
+                              <fo:block background-color="#d4d4d4" padding-bottom="0.5pt" padding-right="1pt">
+                                <xsl:if test="$inner-border-radius"><xsl:attribute name="fox:border-radius"><xsl:value-of select="$inner-border-radius"/></xsl:attribute></xsl:if>
+                                <xsl:apply-templates select="$inner/node()" mode="strip-margin"/>
+                              </fo:block>
+                            </fo:block>
+                          </fo:block>
+                        </fo:block>
+                      </fo:block>
+                    </fo:block>
+                  </fo:block>
+                </fo:block>
+              </xsl:when>
+
+              <!-- md / yes / default: 6 diffuse layers (6pt right / 3pt bottom, 1pt right steps) -->
+              <xsl:otherwise>
+                <fo:block background-color="#f4f4f4" padding-bottom="3pt" padding-right="6pt">
+                  <xsl:if test="$inner-border-radius"><xsl:attribute name="fox:border-radius"><xsl:value-of select="$inner-border-radius"/></xsl:attribute></xsl:if>
+                  <fo:block background-color="#eeeeee" padding-bottom="2.5pt" padding-right="5pt">
+                    <xsl:if test="$inner-border-radius"><xsl:attribute name="fox:border-radius"><xsl:value-of select="$inner-border-radius"/></xsl:attribute></xsl:if>
+                    <fo:block background-color="#e8e8e8" padding-bottom="2pt" padding-right="4pt">
+                      <xsl:if test="$inner-border-radius"><xsl:attribute name="fox:border-radius"><xsl:value-of select="$inner-border-radius"/></xsl:attribute></xsl:if>
+                      <fo:block background-color="#e0e0e0" padding-bottom="1.5pt" padding-right="3pt">
+                        <xsl:if test="$inner-border-radius"><xsl:attribute name="fox:border-radius"><xsl:value-of select="$inner-border-radius"/></xsl:attribute></xsl:if>
+                        <fo:block background-color="#d8d8d8" padding-bottom="1pt" padding-right="2pt">
+                          <xsl:if test="$inner-border-radius"><xsl:attribute name="fox:border-radius"><xsl:value-of select="$inner-border-radius"/></xsl:attribute></xsl:if>
+                          <fo:block background-color="#d4d4d4" padding-bottom="0.5pt" padding-right="1pt">
+                            <xsl:if test="$inner-border-radius"><xsl:attribute name="fox:border-radius"><xsl:value-of select="$inner-border-radius"/></xsl:attribute></xsl:if>
+                            <xsl:apply-templates select="$inner/node()" mode="strip-margin"/>
+                          </fo:block>
+                        </fo:block>
+                      </fo:block>
+                    </fo:block>
+                  </fo:block>
+                </fo:block>
+              </xsl:otherwise>
+
+            </xsl:choose>
           </fo:block>
         </fo:block>
       </xsl:otherwise>
