@@ -6,7 +6,8 @@
   version="2.0"
 >
 
-  <xsl:import href="bootstrap-settings.xsl"/>
+  <xsl:import href="default-values.xsl"/>
+  <xsl:import href="settings-map.xsl"/>
 
   <!-- Standard Bootstrap Text Colors -->
   <xsl:attribute-set name="__color__primary">
