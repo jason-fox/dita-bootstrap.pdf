@@ -681,4 +681,114 @@
       <!-- Default: No decoration -->
   </xsl:template>
 
+  <!-- Global Shadow Wrapper for Neo-Brutalist shadow styling -->
+  <xsl:template match="*[@shadow][not(@shadow = 'none') and not(@shadow = 'no')][not(contains(@class, ' bootstrap-d/card ') or tokenize(@outputclass, ' ') = 'card')]" priority="10">
+    <xsl:variable name="inner">
+      <xsl:next-match/>
+    </xsl:variable>
+
+    <xsl:call-template name="apply-shadow-wrapper">
+      <xsl:with-param name="inner" select="$inner"/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="apply-shadow-wrapper">
+    <xsl:param name="inner"/>
+    <xsl:param name="shadow-val" select="@shadow"/>
+    <xsl:param name="margin-val" select="@margin"/>
+
+    <xsl:choose>
+      <xsl:when test="$inner/*[1][self::fo:inline or self::fo:basic-link]">
+        <!-- Do not wrap inline elements in block-level shadow wrappers -->
+        <xsl:copy-of select="$inner"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:variable name="shadow-offset">
+          <xsl:choose>
+            <xsl:when test="$shadow-val = 'sm'">3pt</xsl:when>
+            <xsl:when test="$shadow-val = 'lg'">12pt</xsl:when>
+            <xsl:when test="$shadow-val = 'md' or $shadow-val = 'yes'">6pt</xsl:when>
+            <xsl:otherwise>6pt</xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+
+        <!-- Read the actual border-radius computed by the inner element's own template.
+             This covers @rounded on the element itself, defaults applied by alert/note
+             templates, and flat themes that set border-radius to 0. -->
+        <xsl:variable name="inner-border-radius" select="$inner/*[1]/@fox:border-radius"/>
+
+        <!-- Outer Boundary Restraint: perfectly inherits required structural dimensions and layout-padding -->
+        <fo:block>
+          <xsl:if test="$inner/*[1]/@width">
+            <xsl:attribute name="width"><xsl:value-of select="$inner/*[1]/@width"/></xsl:attribute>
+          </xsl:if>
+          <xsl:if test="$inner/*[1]/@inline-progression-dimension">
+            <xsl:attribute name="inline-progression-dimension"><xsl:value-of select="$inner/*[1]/@inline-progression-dimension"/></xsl:attribute>
+          </xsl:if>
+          
+          <xsl:call-template name="processBootstrapSpacing">
+            <xsl:with-param name="attrValue" select="$margin-val"/>
+            <xsl:with-param name="prefix" select="'m'"/>
+          </xsl:call-template>
+
+          <!-- Expansion Sub-Wrapper: Expands outwards by the shadow-offset via negative structural margins -->
+          <fo:block margin-right="-{$shadow-offset}" margin-bottom="-{$shadow-offset}">
+              <!-- Render Shadow Wrapper: Offsets the internal content using dedicated padding values.
+                   Copies the inner element's exact fox:border-radius so corners align perfectly. -->
+              <fo:block background-color="#d8d8d8" padding-bottom="{$shadow-offset}" padding-right="{$shadow-offset}">
+                <xsl:if test="$inner-border-radius">
+                  <xsl:attribute name="fox:border-radius"><xsl:value-of select="$inner-border-radius"/></xsl:attribute>
+                </xsl:if>
+                <xsl:apply-templates select="$inner/node()" mode="strip-margin"/>
+              </fo:block>
+          </fo:block>
+        </fo:block>
+      </xsl:otherwise>
+    </xsl:choose>
+
+  </xsl:template>
+
+  <!-- Identity transform to strip margins from the inner shadow block -->
+  <xsl:template match="node() | @*" mode="strip-margin">
+    <xsl:copy>
+      <xsl:apply-templates select="node() | @*" mode="strip-margin"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <!-- Remove margin and explicit widths from the root fo:block of the processed inner tree -->
+  <!-- For nested elements (non-root), all attributes pass through unchanged -->
+  <xsl:template match="fo:block/@margin | fo:block/@margin-top | fo:block/@margin-bottom | fo:block/@margin-left | fo:block/@margin-right | fo:block/@width | fo:block/@inline-progression-dimension" mode="strip-margin">
+    <xsl:if test="count(../ancestor::*) &gt; 1">
+      <xsl:copy/>
+    </xsl:if>
+  </xsl:template>
+
+  <!-- For fo:table: only strip margin/space attrs at root level, keep width -->
+  <xsl:template match="fo:table/@margin | fo:table/@margin-top | fo:table/@margin-bottom | fo:table/@margin-left | fo:table/@margin-right | fo:table/@space-before | fo:table/@space-after" mode="strip-margin">
+    <xsl:if test="count(../ancestor::*) &gt; 1">
+      <xsl:copy/>
+    </xsl:if>
+  </xsl:template>
+
+  <!-- Remove margin from root - for fo:block strip width too (outer block controls size) -->
+  <xsl:template match="fo:block[count(ancestor::*) = 0]" mode="strip-margin" priority="6">
+    <xsl:copy>
+      <xsl:if test="not(@background-color)">
+        <xsl:attribute name="background-color">#ffffff</xsl:attribute>
+      </xsl:if>
+      <xsl:attribute name="margin">0pt</xsl:attribute>
+      <xsl:apply-templates select="node() | @*" mode="strip-margin"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <!-- For fo:table at root: only zero out margin/space; preserve width and border intact -->
+  <xsl:template match="fo:table[count(ancestor::*) = 0]" mode="strip-margin" priority="6">
+    <xsl:copy>
+      <xsl:attribute name="margin">0pt</xsl:attribute>
+      <xsl:attribute name="space-before">0pt</xsl:attribute>
+      <xsl:attribute name="space-after">0pt</xsl:attribute>
+      <xsl:apply-templates select="node() | @*" mode="strip-margin"/>
+    </xsl:copy>
+  </xsl:template>
+
 </xsl:stylesheet>

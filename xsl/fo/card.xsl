@@ -60,7 +60,21 @@
              <!-- Column 1: Always contains the Card content -->
              <!-- In RTL, Column 1 is on the Right. In LTR, Column 1 is on the Left. -->
              <fo:table-cell>
-                <xsl:call-template name="renderCardInternal"/>
+                <xsl:choose>
+                   <xsl:when test="@shadow and @shadow != 'none'">
+                      <xsl:variable name="card-content">
+                         <xsl:call-template name="renderCardInternal"/>
+                      </xsl:variable>
+                      <xsl:call-template name="apply-shadow-wrapper">
+                         <xsl:with-param name="inner" select="$card-content"/>
+                         <xsl:with-param name="shadow-val" select="@shadow"/>
+                         <xsl:with-param name="margin-val" select="''"/>
+                      </xsl:call-template>
+                   </xsl:when>
+                   <xsl:otherwise>
+                      <xsl:call-template name="renderCardInternal"/>
+                   </xsl:otherwise>
+                </xsl:choose>
              </fo:table-cell>
              
              <!-- Column 2: Always contains the empty Gap (if any) -->
