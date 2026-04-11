@@ -138,6 +138,13 @@
   <xsl:variable name="bootstrap-display-font-weight">300</xsl:variable>
   <xsl:variable name="bootstrap-display-line-height">1.2</xsl:variable>
 
+  <xsl:variable name="bootstrap-body-color">#212529</xsl:variable>
+  <xsl:variable name="bootstrap-body-bg">#ffffff</xsl:variable>
   <xsl:variable name="bootstrap-table-striped-color">#f2f2f2</xsl:variable>
+
+  <!-- PrismJS Decorator defaults -->
+  <xsl:variable name="prismjs.text.color" select="$bootstrap-body-color"/>
+  <xsl:variable name="prismjs.background.color" select="$bootstrap-secondary-subtle"/>
+  <xsl:variable name="prismjs.border.width" select="$bootstrap-border-width"/>
 
 </xsl:stylesheet>

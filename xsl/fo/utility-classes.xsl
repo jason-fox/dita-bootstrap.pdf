@@ -669,8 +669,30 @@
       <xsl:call-template name="processBootstrapBorderColor">
           <xsl:with-param name="attrValue" select="'secondary'"/>
       </xsl:call-template>
-      <xsl:attribute name="border-style">solid</xsl:attribute>
-      <xsl:attribute name="border-width"><xsl:value-of select="$bootstrap-border-width"/></xsl:attribute>
+      <!-- Overrides from settings-map if present -->
+      <xsl:variable name="textColor">
+          <xsl:call-template name="getBootstrapSetting">
+              <xsl:with-param name="name" select="'prismjs.text.color'"/>
+          </xsl:call-template>
+      </xsl:variable>
+      <xsl:variable name="bgColor">
+          <xsl:call-template name="getBootstrapSetting">
+              <xsl:with-param name="name" select="'prismjs.background.color'"/>
+          </xsl:call-template>
+      </xsl:variable>
+      <xsl:variable name="borderWidth">
+          <xsl:call-template name="getBootstrapSetting">
+              <xsl:with-param name="name" select="'prismjs.border.width'"/>
+          </xsl:call-template>
+      </xsl:variable>
+      <xsl:if test="$textColor != ''"><xsl:attribute name="color" select="$textColor"/></xsl:if>
+      <xsl:if test="$bgColor != ''"><xsl:attribute name="background-color" select="$bgColor"/></xsl:if>
+      <xsl:if test="$borderWidth != ''">
+          <xsl:attribute name="border-width" select="$borderWidth"/>
+          <xsl:if test="normalize-space($borderWidth) != ('0', '0pt', '0px', '0in', '0mm', '0cm', '0.0pt', '0.0px')">
+              <xsl:attribute name="border-style">solid</xsl:attribute>
+          </xsl:if>
+      </xsl:if>
       <!-- Use global variables for consistent theme scaling and rounding awareness -->
       <xsl:call-template name="processBootstrapRounded">
         <xsl:with-param name="attrValue" select="(@rounded, 'yes')[1]"/>

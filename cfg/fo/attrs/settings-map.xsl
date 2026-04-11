@@ -137,6 +137,11 @@
     <entry name="bootstrap-display-line-height"><xsl:value-of select="$bootstrap-display-line-height"/></entry>
 
     <entry name="bootstrap-table-striped-color"><xsl:value-of select="$bootstrap-table-striped-color"/></entry>
+    
+    <!-- PrismJS Decorator -->
+    <entry name="prismjs.text.color"><xsl:value-of select="$prismjs.text.color"/></entry>
+    <entry name="prismjs.background.color"><xsl:value-of select="$prismjs.background.color"/></entry>
+    <entry name="prismjs.border.width"><xsl:value-of select="$prismjs.border.width"/></entry>
   </xsl:variable>
 
 </xsl:stylesheet>
