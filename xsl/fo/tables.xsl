@@ -77,7 +77,7 @@
       <xsl:variable name="thead" select="parent::*"/>
       <xsl:variable
         name="theme"
-        select="(@color, substring-after(tokenize($thead/@outputclass, ' ')[starts-with(., 'table-')][1], 'table-'))[1]"
+        select="(@color, $thead/@color, substring-after(tokenize($thead/@outputclass, ' ')[starts-with(., 'table-')][1], 'table-'))[1]"
       />
       
       <xsl:call-template name="bootstrap.decoration">
@@ -129,6 +129,25 @@
             </xsl:otherwise>
           </xsl:choose>
       </xsl:if>
+
+      <xsl:apply-templates/>
+    </fo:table-row>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' topic/tfoot ')]/*[contains(@class, ' topic/row ')]" priority="5">
+    <fo:table-row xsl:use-attribute-sets="tfoot.row">
+      <xsl:call-template name="commonattributes"/>
+
+      <!-- Inherit theme from tfoot if not set on row -->
+      <xsl:variable name="tfoot" select="parent::*"/>
+      <xsl:variable
+        name="theme"
+        select="(@color, $tfoot/@color, substring-after(tokenize($tfoot/@outputclass, ' ')[starts-with(., 'table-')][1], 'table-'))[1]"
+      />
+
+      <xsl:call-template name="bootstrap.decoration">
+          <xsl:with-param name="theme" select="$theme"/>
+      </xsl:call-template>
 
       <xsl:apply-templates/>
     </fo:table-row>
