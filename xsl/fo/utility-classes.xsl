@@ -824,8 +824,14 @@
       <xsl:call-template name="processBootstrapBorder">
           <xsl:with-param name="attrValue" select="@border"/>
       </xsl:call-template>
-      <xsl:variable name="isTableContext" select="contains(@class, ' topic/table ') or contains(@class, ' topic/row ') or contains(@class, ' topic/entry ')"/>
-      <xsl:variable name="hasExplicitBorder" select="@border or @bordercolor or exists(tokenize(@outputclass, ' ')[starts-with(., 'border-')])"/>
+      <xsl:variable
+      name="isTableContext"
+      select="contains(@class, ' topic/table ') or contains(@class, ' topic/row ') or contains(@class, ' topic/entry ')"
+    />
+      <xsl:variable
+      name="hasExplicitBorder"
+      select="@border or @bordercolor or exists(tokenize(@outputclass, ' ')[starts-with(., 'border-')])"
+    />
 
       <xsl:if test="not($isTableContext) or $hasExplicitBorder">
         <xsl:call-template name="processBootstrapBorderColor">
