@@ -153,7 +153,7 @@
           select="@outline = 'yes' or exists(tokenize(@outputclass, ' ')[starts-with(., 'btn-outline-')])"
         />
 
-        <!-- 1. Background & Text Colors -->
+        <!-- Background & Text Colors -->
         <xsl:choose>
           <xsl:when test="$is-outline">
             <xsl:call-template name="processBootstrapAttrSetReflection">
@@ -167,7 +167,7 @@
           </xsl:otherwise>
         </xsl:choose>
         
-        <!-- 2. Borders -->
+        <!-- Borders -->
         <xsl:attribute name="border-style">solid</xsl:attribute>
         <xsl:attribute name="border-width">
            <xsl:choose>
@@ -187,7 +187,7 @@
           </xsl:call-template>
         </xsl:if>
         
-        <!-- 3. Size-dependent Padding & Font Size -->
+        <!-- Size-dependent Padding & Font Size -->
         <xsl:choose>
           <xsl:when test="$size = 'small'">
             <xsl:attribute name="font-size">9pt</xsl:attribute>
@@ -218,18 +218,24 @@
           </xsl:call-template>
         </xsl:if>
         
-        <!-- 4. Rounding (Default to '2' (4pt) instead of 'yes' (6pt)) -->
+        <!-- Rounding (Default to '2' (4pt) instead of 'yes' (6pt)) -->
         <xsl:call-template name="processBootstrapRounded">
           <xsl:with-param name="attrValue" select="(@rounded, if ($size = 'small') then '1' else '2')[1]"/>
         </xsl:call-template>
         
-        <!-- Legacy / Spacing utility support (MOVED UP) -->
+        <!-- Legacy / Spacing utility support -->
         <xsl:call-template name="processBootstrapSpacing">
           <xsl:with-param name="attrValue" select="@margin"/>
           <xsl:with-param name="prefix" select="'m'"/>
         </xsl:call-template>
 
-        <!-- 6. Button Group Position Awareness -->
+        <xsl:call-template name="processBootstrapOutputClass">
+          <xsl:with-param name="attrValue" select="@outputclass"/>
+        </xsl:call-template>
+
+        <xsl:call-template name="bootstrap.decoration"/>
+
+        <!-- Button Group Position Awareness  -->
         <xsl:variable
           name="group"
           select="ancestor::*[contains(@class, ' bootstrap-d/button-group ') or tokenize(@outputclass, ' ') = 'btn-group'][1]"
@@ -298,13 +304,7 @@
           </xsl:choose>
         </xsl:if>
 
-        <xsl:call-template name="processBootstrapOutputClass">
-          <xsl:with-param name="attrValue" select="@outputclass"/>
-        </xsl:call-template>
-
-        <xsl:call-template name="bootstrap.decoration"/>
-
-        <!-- 5. Content handling - ensure we only process the intended label -->
+        <!-- Content handling - ensure we only process the intended text -->
         <fo:inline>
           <xsl:if test="normalize-space() != '' and not(contains(@outputclass, 'btn-floating'))">
             <xsl:attribute name="baseline-shift">0.5pt</xsl:attribute>
