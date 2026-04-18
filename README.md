@@ -13,13 +13,14 @@ A plug-in for [DITA Open Toolkit][1] that adds PDF print output to the [DITA Boo
 Use the `dita` command to add this plug-in and its requirements to your DITA Open Toolkit installation:
 
 ```console
-dita install dita-bootstrap.html
-dita install https://github.com/dita-bootstrap/dita-bootstrap.pdf/archive/master.zip
+dita install dita-bootstrap.specialization
+dita install https://github.com/dita-bootstrap/dita-bootstrap.pdf/archive/develop.zip
 ```
 
 ## Using
 
-Specify the `pdf` format when building output with the `dita` command. If the plug-in is installed, the Bootstrap-based XSL-FO overrides will be applied automatically.
+Specify the `pdf` format when building output with the `dita` command. If the plug-in is installed, the Bootstrap-based 
+XSL-FO overrides will be applied automatically.
 
 ```console
 dita --input=path/to/your.ditamap \
@@ -28,7 +29,8 @@ dita --input=path/to/your.ditamap \
 
 ## Featured Bootstrap components
 
-The plug-in includes XSL-FO handling for the following DITA Bootstrap components. You can use these through the **DITA Bootstrap Specialization** elements to achieve a consistent look in print:
+The plug-in includes XSL-FO handling for the following DITA Bootstrap components. You can use these through the 
+**DITA Bootstrap Specialization** elements to achieve a consistent look in print:
 
 - [Accordions](https://dita-bootstrap.github.io/dita-bootstrap/accordion.html) (`<accordion>`)
 - [Alerts](https://dita-bootstrap.github.io/dita-bootstrap/alerts.html) (`<alert>`)
@@ -46,7 +48,8 @@ The plug-in includes XSL-FO handling for the following DITA Bootstrap components
 
 ## Using Bootstrap Specializations
 
-The preferred way to use this plug-in is via the [DITA Bootstrap domain specializations][2]. These provide native DITA elements with specialized attributes for Bootstrap styling:
+The preferred way to use this plug-in is via the [DITA Bootstrap domain specializations][2]. These provide native DITA elements
+with specialized attributes for Bootstrap styling:
 
 ```xml
 <card color="primary" border="1" rounded="yes">
@@ -86,22 +89,18 @@ Most DITA Bootstrap Specializations, as well as many base DITA elements, support
   </card>
   ```
 
-### Thumbnails
-
-The `<thumbnail>` element (a specialization of `<image>`) can be used to add a themed frame around images:
+- **@color**: Sets the border and background theme (e.g., `primary` uses a solid primary border and a subtle primary background).
 
 ```xml
-<thumbnail href="image.png" color="primary" placement="break"/>
+<thumbnail href="image.png" color="primary" />
 ```
-
-- **@color**: Sets the border and background theme (e.g., `primary` uses a solid primary border and a subtle primary background).
-- **@placement**: Use `break` for a centered block-level image or `inline` for flowing text integration.
 
 ## Customizing
 
 ### Common Bootstrap utility classes
 
-Many of the common Bootstrap utility classes for borders, background, text, and spacing can be used via the `outputclass` attribute in DITA topics. The print plug-in interprets these classes and applies corresponding XSL-FO styling.
+The common Bootstrap utility classes for borders, background, text, and spacing can also be used via the `outputclass` 
+attribute in DITA topics. The print plug-in interprets these classes and applies corresponding XSL-FO styling.
 
 For more information on the available classes, see the [main DITA Bootstrap documentation][2].
 
@@ -110,4 +109,4 @@ For more information on the available classes, see the [main DITA Bootstrap docu
 [Apache 2.0](LICENSE) © 2026 Jason Fox
 
 [1]: http://www.dita-ot.org
-[2]: https://github.com/dita-bootstrap/dita-bootstrap.html
+[2]: https://dita-bootstrap.github.io
