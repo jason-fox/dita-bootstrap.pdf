@@ -172,10 +172,18 @@
             <xsl:choose>
                 <xsl:when test="$writing-mode = 'rl'">
                     <xsl:choose>
-                        <xsl:when test="starts-with($attrSetName, 'ps-')"><xsl:value-of select="concat('pe-', substring-after($attrSetName, '-'))"/></xsl:when>
-                        <xsl:when test="starts-with($attrSetName, 'pe-')"><xsl:value-of select="concat('ps-', substring-after($attrSetName, '-'))"/></xsl:when>
-                        <xsl:when test="starts-with($attrSetName, 'ms-')"><xsl:value-of select="concat('me-', substring-after($attrSetName, '-'))"/></xsl:when>
-                        <xsl:when test="starts-with($attrSetName, 'me-')"><xsl:value-of select="concat('ms-', substring-after($attrSetName, '-'))"/></xsl:when>
+                        <xsl:when test="starts-with($attrSetName, 'ps-')"><xsl:value-of
+                      select="concat('pe-', substring-after($attrSetName, '-'))"
+                    /></xsl:when>
+                        <xsl:when test="starts-with($attrSetName, 'pe-')"><xsl:value-of
+                      select="concat('ps-', substring-after($attrSetName, '-'))"
+                    /></xsl:when>
+                        <xsl:when test="starts-with($attrSetName, 'ms-')"><xsl:value-of
+                      select="concat('me-', substring-after($attrSetName, '-'))"
+                    /></xsl:when>
+                        <xsl:when test="starts-with($attrSetName, 'me-')"><xsl:value-of
+                      select="concat('ms-', substring-after($attrSetName, '-'))"
+                    /></xsl:when>
                         <xsl:otherwise><xsl:value-of select="$attrSetName"/></xsl:otherwise>
                     </xsl:choose>
                 </xsl:when>
@@ -239,7 +247,9 @@
         <xsl:choose>
             <xsl:when test="@dir"><xsl:value-of select="@dir"/></xsl:when>
             <!-- ↓ Ensure code is rendered LTR in RTL documents ↓ -->
-            <xsl:when test="$writing-mode = 'rl' and (contains(@class,' pr-d/') or contains(@class,' sw-d/') or contains(@class,' xml-d/'))">ltr</xsl:when>
+            <xsl:when
+          test="$writing-mode = 'rl' and (contains(@class,' pr-d/') or contains(@class,' sw-d/') or contains(@class,' xml-d/'))"
+        >ltr</xsl:when>
             <xsl:when test="ancestor::*[@dir]"><xsl:value-of select="ancestor::*[@dir][1]/@dir"/></xsl:when>
             <xsl:otherwise/>
         </xsl:choose>
@@ -299,10 +309,18 @@
             <xsl:choose>
                 <xsl:when test="$writing-mode = 'rl'">
                     <xsl:choose>
-                        <xsl:when test="starts-with($attrSetName, 'ps-')"><xsl:value-of select="concat('pe-', substring-after($attrSetName, '-'))"/></xsl:when>
-                        <xsl:when test="starts-with($attrSetName, 'pe-')"><xsl:value-of select="concat('ps-', substring-after($attrSetName, '-'))"/></xsl:when>
-                        <xsl:when test="starts-with($attrSetName, 'ms-')"><xsl:value-of select="concat('me-', substring-after($attrSetName, '-'))"/></xsl:when>
-                        <xsl:when test="starts-with($attrSetName, 'me-')"><xsl:value-of select="concat('ms-', substring-after($attrSetName, '-'))"/></xsl:when>
+                        <xsl:when test="starts-with($attrSetName, 'ps-')"><xsl:value-of
+                      select="concat('pe-', substring-after($attrSetName, '-'))"
+                    /></xsl:when>
+                        <xsl:when test="starts-with($attrSetName, 'pe-')"><xsl:value-of
+                      select="concat('ps-', substring-after($attrSetName, '-'))"
+                    /></xsl:when>
+                        <xsl:when test="starts-with($attrSetName, 'ms-')"><xsl:value-of
+                      select="concat('me-', substring-after($attrSetName, '-'))"
+                    /></xsl:when>
+                        <xsl:when test="starts-with($attrSetName, 'me-')"><xsl:value-of
+                      select="concat('ms-', substring-after($attrSetName, '-'))"
+                    /></xsl:when>
                         <xsl:otherwise><xsl:value-of select="$attrSetName"/></xsl:otherwise>
                     </xsl:choose>
                 </xsl:when>
@@ -397,10 +415,18 @@
             <xsl:choose>
                 <xsl:when test="$writing-mode = 'rl'">
                     <xsl:choose>
-                        <xsl:when test="starts-with($attrSetName, 'ps-')"><xsl:value-of select="concat('pe-', substring-after($attrSetName, '-'))"/></xsl:when>
-                        <xsl:when test="starts-with($attrSetName, 'pe-')"><xsl:value-of select="concat('ps-', substring-after($attrSetName, '-'))"/></xsl:when>
-                        <xsl:when test="starts-with($attrSetName, 'ms-')"><xsl:value-of select="concat('me-', substring-after($attrSetName, '-'))"/></xsl:when>
-                        <xsl:when test="starts-with($attrSetName, 'me-')"><xsl:value-of select="concat('ms-', substring-after($attrSetName, '-'))"/></xsl:when>
+                        <xsl:when test="starts-with($attrSetName, 'ps-')"><xsl:value-of
+                      select="concat('pe-', substring-after($attrSetName, '-'))"
+                    /></xsl:when>
+                        <xsl:when test="starts-with($attrSetName, 'pe-')"><xsl:value-of
+                      select="concat('ps-', substring-after($attrSetName, '-'))"
+                    /></xsl:when>
+                        <xsl:when test="starts-with($attrSetName, 'ms-')"><xsl:value-of
+                      select="concat('me-', substring-after($attrSetName, '-'))"
+                    /></xsl:when>
+                        <xsl:when test="starts-with($attrSetName, 'me-')"><xsl:value-of
+                      select="concat('ms-', substring-after($attrSetName, '-'))"
+                    /></xsl:when>
                         <xsl:otherwise><xsl:value-of select="$attrSetName"/></xsl:otherwise>
                     </xsl:choose>
                 </xsl:when>
@@ -421,10 +447,18 @@
                 <xsl:choose>
                     <xsl:when test="$writing-mode = 'rl'">
                         <xsl:choose>
-                            <xsl:when test="starts-with($token, 'ps-')"><xsl:value-of select="concat('pe-', substring-after($token, '-'))"/></xsl:when>
-                            <xsl:when test="starts-with($token, 'pe-')"><xsl:value-of select="concat('ps-', substring-after($token, '-'))"/></xsl:when>
-                            <xsl:when test="starts-with($token, 'ms-')"><xsl:value-of select="concat('me-', substring-after($token, '-'))"/></xsl:when>
-                            <xsl:when test="starts-with($token, 'me-')"><xsl:value-of select="concat('ms-', substring-after($token, '-'))"/></xsl:when>
+                            <xsl:when test="starts-with($token, 'ps-')"><xsl:value-of
+                        select="concat('pe-', substring-after($token, '-'))"
+                      /></xsl:when>
+                            <xsl:when test="starts-with($token, 'pe-')"><xsl:value-of
+                        select="concat('ps-', substring-after($token, '-'))"
+                      /></xsl:when>
+                            <xsl:when test="starts-with($token, 'ms-')"><xsl:value-of
+                        select="concat('me-', substring-after($token, '-'))"
+                      /></xsl:when>
+                            <xsl:when test="starts-with($token, 'me-')"><xsl:value-of
+                        select="concat('ms-', substring-after($token, '-'))"
+                      /></xsl:when>
                             <xsl:otherwise><xsl:value-of select="$token"/></xsl:otherwise>
                         </xsl:choose>
                     </xsl:when>
@@ -471,10 +505,18 @@
                 <xsl:choose>
                     <xsl:when test="$writing-mode = 'rl'">
                         <xsl:choose>
-                            <xsl:when test="starts-with($token, 'ps-')"><xsl:value-of select="concat('pe-', substring-after($token, '-'))"/></xsl:when>
-                            <xsl:when test="starts-with($token, 'pe-')"><xsl:value-of select="concat('ps-', substring-after($token, '-'))"/></xsl:when>
-                            <xsl:when test="starts-with($token, 'ms-')"><xsl:value-of select="concat('me-', substring-after($token, '-'))"/></xsl:when>
-                            <xsl:when test="starts-with($token, 'me-')"><xsl:value-of select="concat('ms-', substring-after($token, '-'))"/></xsl:when>
+                            <xsl:when test="starts-with($token, 'ps-')"><xsl:value-of
+                          select="concat('pe-', substring-after($token, '-'))"
+                        /></xsl:when>
+                            <xsl:when test="starts-with($token, 'pe-')"><xsl:value-of
+                          select="concat('ps-', substring-after($token, '-'))"
+                        /></xsl:when>
+                            <xsl:when test="starts-with($token, 'ms-')"><xsl:value-of
+                          select="concat('me-', substring-after($token, '-'))"
+                        /></xsl:when>
+                            <xsl:when test="starts-with($token, 'me-')"><xsl:value-of
+                          select="concat('ms-', substring-after($token, '-'))"
+                        /></xsl:when>
                             <xsl:otherwise><xsl:value-of select="$token"/></xsl:otherwise>
                         </xsl:choose>
                     </xsl:when>
@@ -1191,7 +1233,10 @@
   </xsl:template>
 
   <!-- Override commonattributes to ensure codeblocks, codeph, and PrismJS tokens are rendered LTR in RTL documents -->
-  <xsl:template match="*[contains(@class, ' pr-d/') or contains(@class, ' sw-d/') or contains(@class, ' xml-d/') or (contains(@class,' topic/ph ') and contains(@outputclass, 'token'))]" mode="commonattributes">
+  <xsl:template
+    match="*[contains(@class, ' pr-d/') or contains(@class, ' sw-d/') or contains(@class, ' xml-d/') or (contains(@class,' topic/ph ') and contains(@outputclass, 'token'))]"
+    mode="commonattributes"
+  >
     <xsl:next-match/>
     <xsl:if test="$writing-mode = 'rl' and not(@dir)">
       <xsl:attribute name="writing-mode">lr-tb</xsl:attribute>
