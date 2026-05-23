@@ -26,12 +26,40 @@
         </xsl:choose>
       </xsl:variable>
       
+      <!-- Determine text color for the icon and border from the theme-subtle attribute set -->
+      <xsl:variable name="icon-color">
+        <xsl:call-template name="getBootstrapAttrValue">
+          <xsl:with-param name="attrSet" select="concat('__bg__', $theme, '-subtle')"/>
+        </xsl:call-template>
+      </xsl:variable>
+
       <!-- 1. Unified Decoration (subtle variant) -->
       <xsl:call-template name="bootstrap.decoration">
           <xsl:with-param name="variant" select="'subtle'"/>
           <xsl:with-param name="theme" select="$theme"/>
           <xsl:with-param name="defaultRounded" select="true()"/>
       </xsl:call-template>
+
+      <xsl:variable name="direction">
+        <xsl:choose>
+            <xsl:when test="@dir"><xsl:value-of select="@dir"/></xsl:when>
+            <xsl:when test="ancestor::*[@dir]"><xsl:value-of select="ancestor::*[@dir][1]/@dir"/></xsl:when>
+            <xsl:otherwise><xsl:value-of select="$writing-mode"/></xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+
+      <xsl:choose>
+        <xsl:when test="$direction = 'rtl' or $direction = 'rl'">
+          <xsl:attribute name="border-right-width"><xsl:value-of select="$bootstrap-note-border-width"/></xsl:attribute>
+          <xsl:attribute name="border-right-style">solid</xsl:attribute>
+          <xsl:attribute name="border-right-color"><xsl:value-of select="$icon-color"/></xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:attribute name="border-left-width"><xsl:value-of select="$bootstrap-note-border-width"/></xsl:attribute>
+          <xsl:attribute name="border-left-style">solid</xsl:attribute>
+          <xsl:attribute name="border-left-color"><xsl:value-of select="$icon-color"/></xsl:attribute>
+        </xsl:otherwise>
+      </xsl:choose>
 
       <!-- 3. Spacing Defaults (if not overridden by attributes) -->
       <xsl:if test="not(@padding or exists(tokenize(@outputclass, ' ')[starts-with(., 'p-')]))">
@@ -44,13 +72,6 @@
       
       <!-- Ensure the note stays on one page -->
       <xsl:attribute name="keep-together.within-page">always</xsl:attribute>
-
-      <!-- Determine text color for the icon from the theme-subtle attribute set -->
-      <xsl:variable name="icon-color">
-        <xsl:call-template name="getBootstrapAttrValue">
-          <xsl:with-param name="attrSet" select="concat('__bg__', $theme, '-subtle')"/>
-        </xsl:call-template>
-      </xsl:variable>
 
       <!-- Note Title / Icon Prefix -->
       <fo:inline font-weight="bold" color="{$icon-color}">

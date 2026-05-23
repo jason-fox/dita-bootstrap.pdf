@@ -88,6 +88,9 @@
   <xsl:variable name="bootstrap-badge-dark-bg">#212529</xsl:variable>
   <xsl:variable name="bootstrap-badge-dark-color">#ffffff</xsl:variable>
 
+  <!-- Component-specific: Notes -->
+  <xsl:variable name="bootstrap-note-border-width">6pt</xsl:variable>
+
   <!-- Utilities -->
   <xsl:variable name="bootstrap-spacing-0">0</xsl:variable>
   <xsl:variable name="bootstrap-spacing-1">3pt</xsl:variable>
