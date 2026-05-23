@@ -225,6 +225,8 @@
     <xsl:variable name="direction">
         <xsl:choose>
             <xsl:when test="@dir"><xsl:value-of select="@dir"/></xsl:when>
+            <!-- ↓ Ensure code is rendered LTR in RTL documents ↓ -->
+            <xsl:when test="$writing-mode = 'rl' and (contains(@class,' pr-d/') or contains(@class,' sw-d/') or contains(@class,' xml-d/'))">ltr</xsl:when>
             <xsl:when test="ancestor::*[@dir]"><xsl:value-of select="ancestor::*[@dir][1]/@dir"/></xsl:when>
             <xsl:otherwise/>
         </xsl:choose>
@@ -1106,6 +1108,34 @@
     priority="10"
   />
 
-  <xsl:template match="processing-instruction()" mode="bootstrap-label" priority="10"/>
+  <!-- Intercept block-level code elements to force a new LTR reference area for FOP -->
+  <xsl:template match="*[contains(@class, ' pr-d/codeblock ')]" priority="1000">
+    <xsl:choose>
+      <xsl:when test="$writing-mode = 'rl' and not(@dir)">
+        <fo:block-container writing-mode="lr-tb">
+          <!-- Force indent to 0 on the container so we don't double-inherit the RTL right-indent -->
+          <xsl:attribute name="start-indent">0pt</xsl:attribute>
+          <xsl:attribute name="end-indent">0pt</xsl:attribute>
+          <xsl:next-match/>
+        </fo:block-container>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:next-match/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- Override commonattributes to ensure codeblocks, codeph, and PrismJS tokens are rendered LTR in RTL documents -->
+  <xsl:template match="*[contains(@class, ' pr-d/') or contains(@class, ' sw-d/') or contains(@class, ' xml-d/') or (contains(@class,' topic/ph ') and contains(@outputclass, 'token'))]" mode="commonattributes">
+    <xsl:next-match/>
+    <xsl:if test="$writing-mode = 'rl' and not(@dir)">
+      <xsl:attribute name="writing-mode">lr-tb</xsl:attribute>
+      <xsl:attribute name="direction">ltr</xsl:attribute>
+      <xsl:attribute name="unicode-bidi">bidi-override</xsl:attribute>
+      <xsl:attribute name="xml:lang">en</xsl:attribute>
+      <xsl:attribute name="text-align">left</xsl:attribute>
+      <xsl:attribute name="text-align-last">left</xsl:attribute>
+    </xsl:if>
+  </xsl:template>
 
 </xsl:stylesheet>
