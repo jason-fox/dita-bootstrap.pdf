@@ -168,7 +168,20 @@
         </xsl:variable>
         
         <xsl:call-template name="processBootstrapAttrSetReflection">
-          <xsl:with-param name="attrSet" select="$attrSetName"/>
+          <xsl:with-param name="attrSet">
+            <xsl:choose>
+                <xsl:when test="$writing-mode = 'rl'">
+                    <xsl:choose>
+                        <xsl:when test="starts-with($attrSetName, 'ps-')"><xsl:value-of select="concat('pe-', substring-after($attrSetName, '-'))"/></xsl:when>
+                        <xsl:when test="starts-with($attrSetName, 'pe-')"><xsl:value-of select="concat('ps-', substring-after($attrSetName, '-'))"/></xsl:when>
+                        <xsl:when test="starts-with($attrSetName, 'ms-')"><xsl:value-of select="concat('me-', substring-after($attrSetName, '-'))"/></xsl:when>
+                        <xsl:when test="starts-with($attrSetName, 'me-')"><xsl:value-of select="concat('ms-', substring-after($attrSetName, '-'))"/></xsl:when>
+                        <xsl:otherwise><xsl:value-of select="$attrSetName"/></xsl:otherwise>
+                    </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise><xsl:value-of select="$attrSetName"/></xsl:otherwise>
+            </xsl:choose>
+          </xsl:with-param>
         </xsl:call-template>
       </xsl:for-each>
     </xsl:if>
@@ -282,7 +295,20 @@
           select="if ($val = ('yes', 'true')) then 'rounded' else concat('rounded-', $val)"
         />
         <xsl:call-template name="processBootstrapAttrSetReflection">
-          <xsl:with-param name="attrSet" select="$attrSetName"/>
+          <xsl:with-param name="attrSet">
+            <xsl:choose>
+                <xsl:when test="$writing-mode = 'rl'">
+                    <xsl:choose>
+                        <xsl:when test="starts-with($attrSetName, 'ps-')"><xsl:value-of select="concat('pe-', substring-after($attrSetName, '-'))"/></xsl:when>
+                        <xsl:when test="starts-with($attrSetName, 'pe-')"><xsl:value-of select="concat('ps-', substring-after($attrSetName, '-'))"/></xsl:when>
+                        <xsl:when test="starts-with($attrSetName, 'ms-')"><xsl:value-of select="concat('me-', substring-after($attrSetName, '-'))"/></xsl:when>
+                        <xsl:when test="starts-with($attrSetName, 'me-')"><xsl:value-of select="concat('ms-', substring-after($attrSetName, '-'))"/></xsl:when>
+                        <xsl:otherwise><xsl:value-of select="$attrSetName"/></xsl:otherwise>
+                    </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise><xsl:value-of select="$attrSetName"/></xsl:otherwise>
+            </xsl:choose>
+          </xsl:with-param>
         </xsl:call-template>
       </xsl:if>
     </xsl:if>
@@ -367,7 +393,20 @@
           </xsl:choose>
         </xsl:variable>
         <xsl:call-template name="processBootstrapAttrSetReflection">
-          <xsl:with-param name="attrSet" select="$attrSetName"/>
+          <xsl:with-param name="attrSet">
+            <xsl:choose>
+                <xsl:when test="$writing-mode = 'rl'">
+                    <xsl:choose>
+                        <xsl:when test="starts-with($attrSetName, 'ps-')"><xsl:value-of select="concat('pe-', substring-after($attrSetName, '-'))"/></xsl:when>
+                        <xsl:when test="starts-with($attrSetName, 'pe-')"><xsl:value-of select="concat('ps-', substring-after($attrSetName, '-'))"/></xsl:when>
+                        <xsl:when test="starts-with($attrSetName, 'ms-')"><xsl:value-of select="concat('me-', substring-after($attrSetName, '-'))"/></xsl:when>
+                        <xsl:when test="starts-with($attrSetName, 'me-')"><xsl:value-of select="concat('ms-', substring-after($attrSetName, '-'))"/></xsl:when>
+                        <xsl:otherwise><xsl:value-of select="$attrSetName"/></xsl:otherwise>
+                    </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise><xsl:value-of select="$attrSetName"/></xsl:otherwise>
+            </xsl:choose>
+          </xsl:with-param>
         </xsl:call-template>
       </xsl:for-each>
     </xsl:if>
@@ -378,7 +417,20 @@
         <xsl:variable name="token" select="."/>
         <xsl:if test="starts-with($token, $prefix) and contains($token, '-')">
            <xsl:call-template name="processBootstrapAttrSetReflection">
-             <xsl:with-param name="attrSet" select="$token"/>
+             <xsl:with-param name="attrSet">
+                <xsl:choose>
+                    <xsl:when test="$writing-mode = 'rl'">
+                        <xsl:choose>
+                            <xsl:when test="starts-with($token, 'ps-')"><xsl:value-of select="concat('pe-', substring-after($token, '-'))"/></xsl:when>
+                            <xsl:when test="starts-with($token, 'pe-')"><xsl:value-of select="concat('ps-', substring-after($token, '-'))"/></xsl:when>
+                            <xsl:when test="starts-with($token, 'ms-')"><xsl:value-of select="concat('me-', substring-after($token, '-'))"/></xsl:when>
+                            <xsl:when test="starts-with($token, 'me-')"><xsl:value-of select="concat('ms-', substring-after($token, '-'))"/></xsl:when>
+                            <xsl:otherwise><xsl:value-of select="$token"/></xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:when>
+                    <xsl:otherwise><xsl:value-of select="$token"/></xsl:otherwise>
+                </xsl:choose>
+             </xsl:with-param>
            </xsl:call-template>
         </xsl:if>
       </xsl:for-each>
@@ -415,7 +467,20 @@
                         starts-with($token, 'display-') or $token = 'lead'"
           >
             <xsl:call-template name="processBootstrapAttrSetReflection">
-              <xsl:with-param name="attrSet" select="$token"/>
+              <xsl:with-param name="attrSet">
+                <xsl:choose>
+                    <xsl:when test="$writing-mode = 'rl'">
+                        <xsl:choose>
+                            <xsl:when test="starts-with($token, 'ps-')"><xsl:value-of select="concat('pe-', substring-after($token, '-'))"/></xsl:when>
+                            <xsl:when test="starts-with($token, 'pe-')"><xsl:value-of select="concat('ps-', substring-after($token, '-'))"/></xsl:when>
+                            <xsl:when test="starts-with($token, 'ms-')"><xsl:value-of select="concat('me-', substring-after($token, '-'))"/></xsl:when>
+                            <xsl:when test="starts-with($token, 'me-')"><xsl:value-of select="concat('ms-', substring-after($token, '-'))"/></xsl:when>
+                            <xsl:otherwise><xsl:value-of select="$token"/></xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:when>
+                    <xsl:otherwise><xsl:value-of select="$token"/></xsl:otherwise>
+                </xsl:choose>
+             </xsl:with-param>
             </xsl:call-template>
           </xsl:when>
           <!-- Text Align utilities (New) -->
