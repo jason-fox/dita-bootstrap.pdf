@@ -80,8 +80,6 @@
       <xsl:attribute name="font-size">0.9em</xsl:attribute>
       <xsl:attribute name="color"><xsl:value-of select="$bootstrap-secondary-subtle-text"/></xsl:attribute>
       <xsl:attribute name="margin-top">8pt</xsl:attribute>
-      <xsl:attribute name="font-weight">bold</xsl:attribute>
-      <xsl:attribute name="font-style">italic</xsl:attribute>
       
       <!-- Alignment: Default left, custom right via text-end -->
       <xsl:attribute name="text-align">

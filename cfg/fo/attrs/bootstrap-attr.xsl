@@ -919,4 +919,73 @@
       <xsl:attribute name="font-weight"><xsl:value-of select="$bootstrap-lead-font-weight"/></xsl:attribute>
   </xsl:attribute-set>
 
+  <!-- Monospace and Code Elements -->
+  <xsl:attribute-set name="codeph" use-attribute-sets="base-font">
+    <xsl:attribute name="font-family"><xsl:value-of select="$monospaced-font-family"/></xsl:attribute>
+    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-code-color"/></xsl:attribute>
+  </xsl:attribute-set>
+  <xsl:attribute-set name="filepath" use-attribute-sets="base-font">
+    <xsl:attribute name="font-family"><xsl:value-of select="$monospaced-font-family"/></xsl:attribute>
+    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-code-color"/></xsl:attribute>
+  </xsl:attribute-set>
+  <xsl:attribute-set name="option">
+    <xsl:attribute name="font-family"><xsl:value-of select="$monospaced-font-family"/></xsl:attribute>
+    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-code-color"/></xsl:attribute>
+  </xsl:attribute-set>
+
+  <!-- Commands & Parameters -->
+  <xsl:attribute-set name="cmdname">
+    <xsl:attribute name="font-family"><xsl:value-of select="$monospaced-font-family"/></xsl:attribute>
+    <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-dita-prussian-blue"/></xsl:attribute>
+  </xsl:attribute-set>
+  <xsl:attribute-set name="parmname">
+    <xsl:attribute name="font-family"><xsl:value-of select="$monospaced-font-family"/></xsl:attribute>
+    <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-dita-prussian-blue"/></xsl:attribute>
+  </xsl:attribute-set>
+
+  <!-- XML Entities -->
+  <xsl:attribute-set name="numcharref">
+    <xsl:attribute name="font-family"><xsl:value-of select="$monospaced-font-family"/></xsl:attribute>
+    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-dita-violet"/></xsl:attribute>
+  </xsl:attribute-set>
+  <xsl:attribute-set name="parameterentity">
+    <xsl:attribute name="font-family"><xsl:value-of select="$monospaced-font-family"/></xsl:attribute>
+    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-dita-violet"/></xsl:attribute>
+  </xsl:attribute-set>
+  <xsl:attribute-set name="textentity">
+    <xsl:attribute name="font-family"><xsl:value-of select="$monospaced-font-family"/></xsl:attribute>
+    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-dita-violet"/></xsl:attribute>
+  </xsl:attribute-set>
+  <xsl:attribute-set name="xmlatt">
+    <xsl:attribute name="font-family"><xsl:value-of select="$monospaced-font-family"/></xsl:attribute>
+    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-dita-violet"/></xsl:attribute>
+  </xsl:attribute-set>
+  <xsl:attribute-set name="xmlelement">
+    <xsl:attribute name="font-family"><xsl:value-of select="$monospaced-font-family"/></xsl:attribute>
+    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-dita-violet"/></xsl:attribute>
+  </xsl:attribute-set>
+  <xsl:attribute-set name="xmlnsname">
+    <xsl:attribute name="font-family"><xsl:value-of select="$monospaced-font-family"/></xsl:attribute>
+    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-dita-violet"/></xsl:attribute>
+  </xsl:attribute-set>
+  <xsl:attribute-set name="xmlpi">
+    <xsl:attribute name="font-family"><xsl:value-of select="$monospaced-font-family"/></xsl:attribute>
+    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-dita-violet"/></xsl:attribute>
+  </xsl:attribute-set>
+
+  <!-- Syntax -->
+  <xsl:attribute-set name="syntaxdiagram">
+    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-dita-maroon"/></xsl:attribute>
+  </xsl:attribute-set>
+
+  <!-- States -->
+  <xsl:attribute-set name="boolean">
+    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-success"/></xsl:attribute>
+  </xsl:attribute-set>
+  <xsl:attribute-set name="state">
+    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-danger"/></xsl:attribute>
+  </xsl:attribute-set>
+
 </xsl:stylesheet>
