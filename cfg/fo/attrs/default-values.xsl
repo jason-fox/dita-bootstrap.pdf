@@ -90,6 +90,9 @@
 
   <!-- Component-specific: Notes -->
   <xsl:variable name="bootstrap-note-border-width">6pt</xsl:variable>
+  <xsl:variable name="bootstrap-alert-link-font-weight">bold</xsl:variable>
+  <xsl:variable name="bootstrap-link-text-decoration">none</xsl:variable>
+  <xsl:variable name="bootstrap-alert-link-text-decoration">underline</xsl:variable>
 
   <!-- Utilities -->
   <xsl:variable name="bootstrap-spacing-0">0</xsl:variable>

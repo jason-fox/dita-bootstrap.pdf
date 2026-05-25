@@ -102,7 +102,7 @@
     </xsl:attribute>
     <xsl:attribute name="text-decoration">
       <xsl:choose>
-        <xsl:when test="@color and local-name() = 'xref'">underline</xsl:when>
+        <xsl:when test="@color and local-name() = 'xref'"><xsl:value-of select="$bootstrap-alert-link-text-decoration"/></xsl:when>
         <xsl:otherwise>
           <xsl:variable name="theme">
             <xsl:choose>
@@ -146,10 +146,16 @@
             </xsl:choose>
           </xsl:variable>
           <xsl:choose>
-            <xsl:when test="$theme != ''">underline</xsl:when>
-            <xsl:otherwise>none</xsl:otherwise>
+            <xsl:when test="$theme != ''"><xsl:value-of select="$bootstrap-alert-link-text-decoration"/></xsl:when>
+            <xsl:otherwise><xsl:value-of select="$bootstrap-link-text-decoration"/></xsl:otherwise>
           </xsl:choose>
         </xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
+    <xsl:attribute name="font-weight">
+      <xsl:choose>
+        <xsl:when test="ancestor::*[contains(@class, ' topic/note ')] or ancestor::*[contains(@class, ' bootstrap-d/alert ') or tokenize(@outputclass, ' ') = 'alert']"><xsl:value-of select="$bootstrap-alert-link-font-weight"/></xsl:when>
+        <xsl:otherwise>inherit</xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
   </xsl:attribute-set>
