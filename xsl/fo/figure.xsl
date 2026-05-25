@@ -78,7 +78,7 @@
       
       <!-- Standard Bootstrap Figure Caption styling -->
       <xsl:attribute name="font-size">0.9em</xsl:attribute>
-      <xsl:attribute name="color"><xsl:value-of select="$bootstrap-secondary"/></xsl:attribute>
+      <xsl:attribute name="color"><xsl:value-of select="$bootstrap-secondary-subtle-text"/></xsl:attribute>
       <xsl:attribute name="margin-top">8pt</xsl:attribute>
       <xsl:attribute name="font-weight">bold</xsl:attribute>
       <xsl:attribute name="font-style">italic</xsl:attribute>
