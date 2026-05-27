@@ -116,6 +116,7 @@
   <xsl:variable name="bootstrap-rounded-pill">100pt</xsl:variable>
 
   <!-- Typography -->
+  <xsl:variable name="monospaced-font-family">monospace</xsl:variable>
   <xsl:variable name="bootstrap-code-color">#d63384</xsl:variable>
   <xsl:variable name="bootstrap-dita-prussian-blue">#1d365d</xsl:variable>
   <xsl:variable name="bootstrap-dita-maroon">#800000</xsl:variable>
