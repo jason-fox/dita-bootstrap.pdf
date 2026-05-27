@@ -118,7 +118,7 @@
   <!-- Typography -->
   <xsl:variable name="monospaced-font-family">monospace</xsl:variable>
   <xsl:variable name="bootstrap-code-color">#d63384</xsl:variable>
-  <xsl:variable name="bootstrap-dita-prussian-blue">#1d365d</xsl:variable>
+  <xsl:variable name="bootstrap-dita-prussian-blue" select="$bootstrap-primary-subtle-text"/>
   <xsl:variable name="bootstrap-dita-maroon">#800000</xsl:variable>
   <xsl:variable name="bootstrap-dita-violet">#6f42c1</xsl:variable>
   <xsl:variable name="bootstrap-h1-font-size">28pt</xsl:variable>
