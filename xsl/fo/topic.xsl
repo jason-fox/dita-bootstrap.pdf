@@ -2,6 +2,8 @@
 <xsl:stylesheet
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  exclude-result-prefixes="xs"
   version="2.0"
 >
 
@@ -52,6 +54,20 @@
       <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates/>
     </fo:block>
+  </xsl:template>
+
+  <!-- Override to prevent duplicate ID generation on inline elements in dt/pt -->
+  <xsl:template match="@id" priority="2">
+    <xsl:param name="bootstrap-suppress-id" select="false()" tunnel="yes" as="xs:boolean"/>
+    <xsl:if test="not($bootstrap-suppress-id)">
+      <xsl:attribute name="id" select="."/>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' topic/dt ')]" mode="inlineTextOptionalKeyref" priority="2">
+    <xsl:next-match>
+      <xsl:with-param name="bootstrap-suppress-id" select="true()" tunnel="yes"/>
+    </xsl:next-match>
   </xsl:template>
 
 </xsl:stylesheet>
