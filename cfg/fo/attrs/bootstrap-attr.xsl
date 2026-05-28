@@ -931,57 +931,57 @@
 
   <!-- Monospace and Code Elements -->
   <xsl:attribute-set name="codeph" use-attribute-sets="base-font">
-    <xsl:attribute name="font-family"><xsl:value-of select="$monospaced-font-family"/></xsl:attribute>
+    <xsl:attribute name="font-family">monospace</xsl:attribute>
     <xsl:attribute name="color"><xsl:value-of select="$bootstrap-code-color"/></xsl:attribute>
   </xsl:attribute-set>
   <xsl:attribute-set name="filepath" use-attribute-sets="base-font">
-    <xsl:attribute name="font-family"><xsl:value-of select="$monospaced-font-family"/></xsl:attribute>
+    <xsl:attribute name="font-family">monospace</xsl:attribute>
     <xsl:attribute name="color"><xsl:value-of select="$bootstrap-code-color"/></xsl:attribute>
   </xsl:attribute-set>
   <xsl:attribute-set name="option">
-    <xsl:attribute name="font-family"><xsl:value-of select="$monospaced-font-family"/></xsl:attribute>
+    <xsl:attribute name="font-family">monospace</xsl:attribute>
     <xsl:attribute name="color"><xsl:value-of select="$bootstrap-code-color"/></xsl:attribute>
   </xsl:attribute-set>
 
   <!-- Commands & Parameters -->
   <xsl:attribute-set name="cmdname">
-    <xsl:attribute name="font-family"><xsl:value-of select="$monospaced-font-family"/></xsl:attribute>
+    <xsl:attribute name="font-family">monospace</xsl:attribute>
     <xsl:attribute name="font-weight">bold</xsl:attribute>
     <xsl:attribute name="color"><xsl:value-of select="$bootstrap-dita-prussian-blue"/></xsl:attribute>
   </xsl:attribute-set>
   <xsl:attribute-set name="parmname">
-    <xsl:attribute name="font-family"><xsl:value-of select="$monospaced-font-family"/></xsl:attribute>
+    <xsl:attribute name="font-family">monospace</xsl:attribute>
     <xsl:attribute name="font-weight">bold</xsl:attribute>
     <xsl:attribute name="color"><xsl:value-of select="$bootstrap-dita-prussian-blue"/></xsl:attribute>
   </xsl:attribute-set>
 
   <!-- XML Entities -->
   <xsl:attribute-set name="numcharref">
-    <xsl:attribute name="font-family"><xsl:value-of select="$monospaced-font-family"/></xsl:attribute>
+    <xsl:attribute name="font-family">monospace</xsl:attribute>
     <xsl:attribute name="color"><xsl:value-of select="$bootstrap-dita-violet"/></xsl:attribute>
   </xsl:attribute-set>
   <xsl:attribute-set name="parameterentity">
-    <xsl:attribute name="font-family"><xsl:value-of select="$monospaced-font-family"/></xsl:attribute>
+    <xsl:attribute name="font-family">monospace</xsl:attribute>
     <xsl:attribute name="color"><xsl:value-of select="$bootstrap-dita-violet"/></xsl:attribute>
   </xsl:attribute-set>
   <xsl:attribute-set name="textentity">
-    <xsl:attribute name="font-family"><xsl:value-of select="$monospaced-font-family"/></xsl:attribute>
+    <xsl:attribute name="font-family">monospace</xsl:attribute>
     <xsl:attribute name="color"><xsl:value-of select="$bootstrap-dita-violet"/></xsl:attribute>
   </xsl:attribute-set>
   <xsl:attribute-set name="xmlatt">
-    <xsl:attribute name="font-family"><xsl:value-of select="$monospaced-font-family"/></xsl:attribute>
+    <xsl:attribute name="font-family">monospace</xsl:attribute>
     <xsl:attribute name="color"><xsl:value-of select="$bootstrap-dita-violet"/></xsl:attribute>
   </xsl:attribute-set>
   <xsl:attribute-set name="xmlelement">
-    <xsl:attribute name="font-family"><xsl:value-of select="$monospaced-font-family"/></xsl:attribute>
+    <xsl:attribute name="font-family">monospace</xsl:attribute>
     <xsl:attribute name="color"><xsl:value-of select="$bootstrap-dita-violet"/></xsl:attribute>
   </xsl:attribute-set>
   <xsl:attribute-set name="xmlnsname">
-    <xsl:attribute name="font-family"><xsl:value-of select="$monospaced-font-family"/></xsl:attribute>
+    <xsl:attribute name="font-family">monospace</xsl:attribute>
     <xsl:attribute name="color"><xsl:value-of select="$bootstrap-dita-violet"/></xsl:attribute>
   </xsl:attribute-set>
   <xsl:attribute-set name="xmlpi">
-    <xsl:attribute name="font-family"><xsl:value-of select="$monospaced-font-family"/></xsl:attribute>
+    <xsl:attribute name="font-family">monospace</xsl:attribute>
     <xsl:attribute name="color"><xsl:value-of select="$bootstrap-dita-violet"/></xsl:attribute>
   </xsl:attribute-set>
 
@@ -996,6 +996,31 @@
   </xsl:attribute-set>
   <xsl:attribute-set name="state">
     <xsl:attribute name="color"><xsl:value-of select="$bootstrap-danger"/></xsl:attribute>
+  </xsl:attribute-set>
+
+  <!-- Keyboard and Keyword style reversal (light text on dark background) -->
+  <xsl:attribute-set name="kwd">
+    <xsl:attribute name="font-family">monospace</xsl:attribute>
+    <xsl:attribute name="background-color"><xsl:value-of select="$bootstrap-body-color"/></xsl:attribute>
+    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-body-bg"/></xsl:attribute>
+    <xsl:attribute name="padding-left">3pt</xsl:attribute>
+    <xsl:attribute name="padding-right">3pt</xsl:attribute>
+    <xsl:attribute name="padding-top">3pt</xsl:attribute>
+    <xsl:attribute name="padding-bottom">1pt</xsl:attribute>
+    <xsl:attribute name="margin-bottom">3pt</xsl:attribute>
+    <xsl:attribute name="fox:border-radius"><xsl:value-of select="$bootstrap-rounded-1"/></xsl:attribute>
+  </xsl:attribute-set>
+
+  <xsl:attribute-set name="userinput">
+    <xsl:attribute name="font-family">monospace</xsl:attribute>
+    <xsl:attribute name="background-color"><xsl:value-of select="$bootstrap-body-color"/></xsl:attribute>
+    <xsl:attribute name="color"><xsl:value-of select="$bootstrap-body-bg"/></xsl:attribute>
+    <xsl:attribute name="padding-left">3pt</xsl:attribute>
+    <xsl:attribute name="padding-right">3pt</xsl:attribute>
+    <xsl:attribute name="padding-top">3pt</xsl:attribute>
+    <xsl:attribute name="padding-bottom">1pt</xsl:attribute>
+    <xsl:attribute name="margin-bottom">3pt</xsl:attribute>
+    <xsl:attribute name="fox:border-radius"><xsl:value-of select="$bootstrap-rounded-1"/></xsl:attribute>
   </xsl:attribute-set>
 
 </xsl:stylesheet>
